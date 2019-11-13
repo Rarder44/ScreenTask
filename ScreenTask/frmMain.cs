@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExtendCSharp.ExtendedClass;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -30,6 +31,16 @@ namespace ScreenTask
         private MemoryStream img;
         private List<Tuple<string, string>> _ips;
         HttpListener serv;
+
+
+        List<TcpClientPlus> Clients = new List<TcpClientPlus>();
+        TcpListenerPlus Listener = null;
+
+
+        Bitmap LastBitmap = null;
+        byte[] LastJpeg = null;
+        private MemoryStream ImgTmp;
+
         public frmMain()
         {
             InitializeComponent();
@@ -80,7 +91,7 @@ namespace ScreenTask
                 Log("Error! : " + ex.Message);
             }
         }
-        private async Task StartServer()
+        private async Task StartServerOLD()
         {
             //serv = serv??new HttpListener();
             var selectedIP = _ips.ElementAt(comboIPs.SelectedIndex).Item2;
@@ -200,6 +211,44 @@ namespace ScreenTask
             }
 
         }
+        private async Task StartServer()
+        {
+           
+            String selectedIP = _ips.ElementAt(comboIPs.SelectedIndex).Item2;
+            int Port = (int)numPort.Value;
+
+            Clients.Clear();
+
+            Listener = new TcpListenerPlus(selectedIP, Port);
+            Listener.ClientConnected += Listener_ClientConnected;
+            Listener.Start();
+
+            Log("Server Started Successfuly!");
+            Log("Private Network Socket : " + selectedIP+":"+ Port);
+            while (isWorking)
+            {
+                foreach(TcpClientPlus client in Clients)
+                {
+                    //TODO: Invio l'immagine
+                }
+
+
+                await Task.Delay(1000);
+            }
+
+        }
+
+        private void Listener_ClientConnected(TcpClientPlus client)
+        {
+            Clients.Add(client);
+        }
+
+        private void Client_disconnected(TcpClientPlus client)
+        {
+            Clients.Remove(client);
+        }
+
+
         private async Task CaptureScreenEvery(int msec)
         {
             while (isWorking)
@@ -214,7 +263,7 @@ namespace ScreenTask
 
             }
         }
-        private void TakeScreenshot(bool captureMouse)
+        private void TakeScreenshotOLD(bool captureMouse)
         {
             if (captureMouse)
             {
@@ -250,6 +299,57 @@ namespace ScreenTask
 
 
             }
+        }
+
+        private void TakeScreenshot(bool captureMouse)
+        {
+            if(LastBitmap!=null )
+                LastBitmap.Dispose();
+            
+            if (ImgTmp != null)
+                ImgTmp.Dispose();
+
+            if (captureMouse)
+            {
+                LastBitmap = ScreenCapturePInvoke.CaptureFullScreen(true);
+                ImgTmp = new MemoryStream();
+                LastBitmap.Save(ImgTmp, ImageFormat.Jpeg);
+                LastJpeg = ImgTmp.ToArray();
+
+                if (isPreview)
+                {
+                    //imgPreview.Image = new Bitmap(ImgTmp);
+                    imgPreview.Image = LastBitmap;
+                }
+                return;
+            }
+            else
+            {
+                
+                Rectangle bounds = Screen.GetBounds(Point.Empty);
+                LastBitmap = new Bitmap(bounds.Width,bounds.Height);
+                using (Graphics g = Graphics.FromImage(LastBitmap))
+                {
+                    g.CopyFromScreen(Point.Empty, Point.Empty, bounds.Size);
+                }
+
+
+                ImgTmp = new MemoryStream();
+                LastBitmap.Save(ImgTmp, ImageFormat.Jpeg);
+                LastJpeg = ImgTmp.ToArray();
+
+                if (isPreview)
+                {
+                    //imgPreview.Image = new Bitmap(ImgTmp);
+                    imgPreview.Image = LastBitmap;
+                }
+            }
+
+
+            
+
+
+
         }
         private string GetIPv4Address()
         {
