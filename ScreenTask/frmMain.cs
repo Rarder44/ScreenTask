@@ -1,4 +1,5 @@
-﻿using ExtendCSharp.ExtendedClass;
+﻿using Common;
+using ExtendCSharp.ExtendedClass;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -227,9 +228,13 @@ namespace ScreenTask
             Log("Private Network Socket : " + selectedIP+":"+ Port);
             while (isWorking)
             {
-                foreach(TcpClientPlus client in Clients)
+                DataPacket dp = new DataPacket();
+                dp.Data = LastJpeg;
+
+                foreach (TcpClientPlus client in Clients)
                 {
-                    //TODO: Invio l'immagine
+                    dp.SerializeToStream(client.GetStream());
+
                 }
 
 
