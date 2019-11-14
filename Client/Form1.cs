@@ -22,34 +22,103 @@ namespace Client
         {
             InitializeComponent();
 
-            //TODO: implemento le textbox | ricerca in rete
-            connection = new TcpClientPlus("127.0.0.1", 7070);
-            Connesso = true;
             
-            new Task(() => {
-                while (Connesso)
+        }
+
+        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //TODO: implemento  ricerca in rete
+            StartConnection();
+           
+        }
+
+
+        private void CheckConnection()
+        {
+            if( !connection.Connected)
+            {
+                StopConnection();       //se non c'è piu connessione, interrompo il ciclo di lettura
+            }
+        }
+
+        private void StopConnection()
+        {
+            Connesso = false;
+            toolStripStatusLabel1.SetTextInvoke("Connessione interrotta");
+            EnableGUI(true);
+        }
+        private async void StartConnection()
+        {
+            try
+            {
+                //TODO: implemento le textbox | ricerca in rete
+                toolStripStatusLabel1.SetTextInvoke("Connessione in corso...");
+                EnableGUI(false);
+                connection = await TcpClientPlus.Create(textBox_IP.Text, (int)numeric_Port.Value);
+                Connesso = true;
+                new Task(TaskGetImage).Start();
+                toolStripStatusLabel1.SetTextInvoke("Connessione effettuata");
+               
+            }
+            catch(Exception ex)
+            {
+                toolStripStatusLabel1.SetTextInvoke("Impossibile stabilire la connessione");
+                EnableGUI(true);
+            }
+            
+
+           
+        }
+
+        /// <summary>
+        /// Task che viene ripetuto per ottenere le immagini
+        /// </summary>
+        private void TaskGetImage()
+        {
+            
+            while (Connesso)
+            {
+                DataPacket p = DataPacket.DeserializeFromStream(connection.GetStream());
+                if (p == null)  //in caso ritorni null, ci puo essere un errore di comunicazione o la connessione è saltata
                 {
-                    DataPacket p = DataPacket.DeserializeFromStream(connection.GetStream());
+                    CheckConnection(); //controllo la connessione
+                }
+                else
+                {
                     using (MemoryStream img = new MemoryStream())
                     {
                         img.Write(p.Data, 0, p.Data.Length);
                         Bitmap b = new Bitmap(img);
-                        
+
                         try
                         {
                             Image old = pictureBox1.Image;
                             pictureBox1.SetImageInvoke(b);
                             old.Dispose();
                         }
-                        catch(Exception e)
+                        catch (Exception ex)
                         {
 
                         }
-                        
+
                     }
                 }
-            
-            }).Start();
+            }
+        }
+
+
+
+        private void EnableGUI(bool enable)
+        {
+            button1.SetEnableInvoke(enable);
+            textBox_IP.SetEnableInvoke(enable);
+            numeric_Port.SetEnableInvoke(enable);
+
         }
     }
 }

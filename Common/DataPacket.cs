@@ -23,9 +23,16 @@ namespace Common
         }
         static public DataPacket DeserializeFromStream(Stream s)
         {
-            BinaryFormatter formatter = new BinaryFormatter(); // the formatter that will serialize my object on my stream 
-            DataPacket dp = (DataPacket)formatter.Deserialize(s);
-            return dp;
+            try
+            {
+                BinaryFormatter formatter = new BinaryFormatter(); // the formatter that will serialize my object on my stream 
+                DataPacket dp = (DataPacket)formatter.Deserialize(s);
+                return dp;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 

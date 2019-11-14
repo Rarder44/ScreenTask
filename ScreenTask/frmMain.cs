@@ -541,6 +541,11 @@ namespace ScreenTask
             Process.Start("https://github.com/EslaMx7/ScreenTask");
         }
 
-
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            isWorking = false;
+            if(Listener!=null)
+                Listener.Stop();
+        }
     }
 }
