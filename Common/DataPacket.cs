@@ -15,18 +15,19 @@ namespace Common
 
 
 
-        public void SerializeToStream(Stream s)
+
+        public void SerializeToStream( Stream s)
         {
             BinaryFormatter formatter = new BinaryFormatter(); // the formatter that will serialize my object on my stream 
-
             formatter.Serialize(s, this); // the serialization process 
         }
-
-        public void DeserializeFromStream(Stream s)
+        static public DataPacket DeserializeFromStream(Stream s)
         {
             BinaryFormatter formatter = new BinaryFormatter(); // the formatter that will serialize my object on my stream 
             DataPacket dp = (DataPacket)formatter.Deserialize(s);
-            this.Data = dp.Data;
+            return dp;
         }
     }
+
+   
 }

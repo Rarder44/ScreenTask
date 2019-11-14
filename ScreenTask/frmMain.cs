@@ -233,12 +233,12 @@ namespace ScreenTask
 
                 foreach (TcpClientPlus client in Clients)
                 {
+                    //TODO: controllo se il client è connesso
+                    
                     dp.SerializeToStream(client.GetStream());
 
                 }
-
-
-                await Task.Delay(1000);
+                await Task.Delay(30);
             }
 
         }
