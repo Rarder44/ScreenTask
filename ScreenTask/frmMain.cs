@@ -1,4 +1,5 @@
 ﻿using Common;
+using ExtendCSharp.Classes;
 using ExtendCSharp.ExtendedClass;
 using System;
 using System.Collections.Generic;
@@ -39,8 +40,8 @@ namespace ScreenTask
 
 
         Bitmap LastBitmap = null;
-        byte[] LastJpeg = null;
-        private MemoryStream ImgTmp;
+        JPG LastJpeg = null;
+        uint JPGQuality;
 
         public frmMain()
         {
@@ -61,11 +62,8 @@ namespace ScreenTask
             {
                 btnStartServer.Tag = "start";
                 btnStartServer.Text = "Start Server";
-                isWorking = false;
-                isTakingScreenshots = false;
-                if (Listener != null)
-                    Listener.Stop();
-                Log("Server Stoped.");
+                
+                StopServer();
                 return;
             }
 
@@ -226,12 +224,14 @@ namespace ScreenTask
             Listener.ClientConnected += Listener_ClientConnected;
             Listener.Start();
 
+            JPGQuality = (uint)trackBar1.Value;
+
             Log("Server Started Successfuly!");
             Log("Private Network Socket : " + selectedIP+":"+ Port);
             while (isWorking)
             {
                 DataPacket dp = new DataPacket();
-                dp.Data = LastJpeg;
+                dp.Data = LastJpeg.data;
 
                 foreach (TcpClientPlus client in Clients)
                 {
@@ -244,7 +244,16 @@ namespace ScreenTask
             }
 
         }
-
+        private void StopServer()
+        {
+            isWorking = false;
+            isTakingScreenshots = false;
+            if (Listener != null)
+                Listener.Stop();
+            foreach (TcpClientPlus client in Clients)
+                client.Close();
+            Log("Server Stoped.");
+        }
         private void Listener_ClientConnected(TcpClientPlus client)
         {
             Clients.Add(client);
@@ -312,23 +321,12 @@ namespace ScreenTask
         {
             if(LastBitmap!=null )
                 LastBitmap.Dispose();
-            
-            if (ImgTmp != null)
-                ImgTmp.Dispose();
+           
 
             if (captureMouse)
             {
                 LastBitmap = ScreenCapturePInvoke.CaptureFullScreen(true);
-                ImgTmp = new MemoryStream();
-                LastBitmap.Save(ImgTmp, ImageFormat.Jpeg);
-                LastJpeg = ImgTmp.ToArray();
-
-                if (isPreview)
-                {
-                    //imgPreview.Image = new Bitmap(ImgTmp);
-                    imgPreview.Image = LastBitmap;
-                }
-                return;
+                
             }
             else
             {
@@ -339,21 +337,15 @@ namespace ScreenTask
                 {
                     g.CopyFromScreen(Point.Empty, Point.Empty, bounds.Size);
                 }
-
-
-                ImgTmp = new MemoryStream();
-                LastBitmap.Save(ImgTmp, ImageFormat.Jpeg);
-                LastJpeg = ImgTmp.ToArray();
-
-                if (isPreview)
-                {
-                    //imgPreview.Image = new Bitmap(ImgTmp);
-                    imgPreview.Image = LastBitmap;
-                }
             }
 
+            LastJpeg = new JPG(LastBitmap, JPGQuality);
 
-            
+            if (isPreview)
+            {
+                imgPreview.Image = LastBitmap;
+            }
+            return;
 
 
 
@@ -437,14 +429,7 @@ namespace ScreenTask
 
         }
 
-        private void btnStopServer_Click(object sender, EventArgs e)
-        {
-            isWorking = false;
-            isTakingScreenshots = false;
-            btnStartServer.Enabled = true;
-            btnStopServer.Enabled = false;
-            Log("Server Stoped.");
-        }
+
 
         private void cbPrivate_CheckedChanged(object sender, EventArgs e)
         {
@@ -540,6 +525,11 @@ namespace ScreenTask
             isWorking = false;
             if(Listener!=null)
                 Listener.Stop();
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            JPGQuality = (uint)trackBar1.Value;
         }
     }
 }

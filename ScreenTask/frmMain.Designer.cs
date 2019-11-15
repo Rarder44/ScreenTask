@@ -29,12 +29,8 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            this.gbOptions = new System.Windows.Forms.GroupBox();
-            this.gbLog = new System.Windows.Forms.GroupBox();
-            this.gbPreview = new System.Windows.Forms.GroupBox();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.imgPreview = new System.Windows.Forms.PictureBox();
-            this.pnlOptions = new System.Windows.Forms.Panel();
             this.comboIPs = new System.Windows.Forms.ComboBox();
             this.cbCaptureMouse = new System.Windows.Forms.CheckBox();
             this.cbPreview = new System.Windows.Forms.CheckBox();
@@ -55,37 +51,13 @@
             this.numShotEvery = new System.Windows.Forms.NumericUpDown();
             this.lblMe = new System.Windows.Forms.Label();
             this.lblGithub = new System.Windows.Forms.Label();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.imgPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numShotEvery)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // gbOptions
-            // 
-            this.gbOptions.Location = new System.Drawing.Point(723, 14);
-            this.gbOptions.Name = "gbOptions";
-            this.gbOptions.Size = new System.Drawing.Size(114, 112);
-            this.gbOptions.TabIndex = 0;
-            this.gbOptions.TabStop = false;
-            this.gbOptions.Text = "Server Options";
-            // 
-            // gbLog
-            // 
-            this.gbLog.Location = new System.Drawing.Point(723, 337);
-            this.gbLog.Name = "gbLog";
-            this.gbLog.Size = new System.Drawing.Size(409, 120);
-            this.gbLog.TabIndex = 1;
-            this.gbLog.TabStop = false;
-            this.gbLog.Text = "Log";
-            // 
-            // gbPreview
-            // 
-            this.gbPreview.Location = new System.Drawing.Point(723, 142);
-            this.gbPreview.Name = "gbPreview";
-            this.gbPreview.Size = new System.Drawing.Size(409, 189);
-            this.gbPreview.TabIndex = 2;
-            this.gbPreview.TabStop = false;
-            this.gbPreview.Text = "Preview";
             // 
             // txtLog
             // 
@@ -109,14 +81,6 @@
             this.imgPreview.TabIndex = 4;
             this.imgPreview.TabStop = false;
             this.imgPreview.Click += new System.EventHandler(this.imgPreview_Click);
-            // 
-            // pnlOptions
-            // 
-            this.pnlOptions.BackColor = System.Drawing.Color.SteelBlue;
-            this.pnlOptions.Location = new System.Drawing.Point(878, 28);
-            this.pnlOptions.Name = "pnlOptions";
-            this.pnlOptions.Size = new System.Drawing.Size(92, 56);
-            this.pnlOptions.TabIndex = 5;
             // 
             // comboIPs
             // 
@@ -164,7 +128,6 @@
             this.btnStopServer.Text = "Stop Server";
             this.btnStopServer.UseVisualStyleBackColor = false;
             this.btnStopServer.Visible = false;
-            this.btnStopServer.Click += new System.EventHandler(this.btnStopServer_Click);
             // 
             // btnStartServer
             // 
@@ -365,23 +328,41 @@
             this.lblGithub.TabIndex = 34;
             this.lblGithub.Click += new System.EventHandler(this.lblGithub_Click);
             // 
+            // trackBar1
+            // 
+            this.trackBar1.Location = new System.Drawing.Point(648, 192);
+            this.trackBar1.Maximum = 100;
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.trackBar1.Size = new System.Drawing.Size(45, 104);
+            this.trackBar1.TabIndex = 35;
+            this.trackBar1.Value = 100;
+            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(633, 176);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(60, 13);
+            this.label7.TabIndex = 36;
+            this.label7.Text = "JPG quality";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::ScreenTask.Properties.Resources.ScreenTaskBackground;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(617, 410);
+            this.ClientSize = new System.Drawing.Size(849, 419);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.imgPreview);
             this.Controls.Add(this.txtLog);
-            this.Controls.Add(this.gbPreview);
-            this.Controls.Add(this.gbLog);
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.btnStartServer);
             this.Controls.Add(this.txtUser);
-            this.Controls.Add(this.gbOptions);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.pnlOptions);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbPrivate);
@@ -409,19 +390,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.imgPreview)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numShotEvery)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.GroupBox gbOptions;
-        private System.Windows.Forms.GroupBox gbLog;
-        private System.Windows.Forms.GroupBox gbPreview;
         private System.Windows.Forms.TextBox txtLog;
         private System.Windows.Forms.PictureBox imgPreview;
-        private System.Windows.Forms.Panel pnlOptions;
         private System.Windows.Forms.ComboBox comboIPs;
         private System.Windows.Forms.CheckBox cbCaptureMouse;
         private System.Windows.Forms.CheckBox cbPreview;
@@ -442,6 +419,8 @@
         private System.Windows.Forms.NumericUpDown numShotEvery;
         private System.Windows.Forms.Label lblMe;
         private System.Windows.Forms.Label lblGithub;
+        private System.Windows.Forms.TrackBar trackBar1;
+        private System.Windows.Forms.Label label7;
     }
 }
 

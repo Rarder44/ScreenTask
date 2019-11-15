@@ -62,6 +62,8 @@ namespace Client
                 toolStripStatusLabel1.SetTextInvoke("Connessione in corso...");
                 EnableGUI(false);
                 connection = await TcpClientPlus.Create(textBox_IP.Text, (int)numeric_Port.Value);
+                connection.Closed += Connection_Closed;
+                connection.StartCheckClose();
                 Connesso = true;
                 new Task(TaskGetImage).Start();
                 toolStripStatusLabel1.SetTextInvoke("Connessione effettuata");
@@ -75,6 +77,12 @@ namespace Client
             
 
            
+        }
+
+        private void Connection_Closed(TcpClientPlus client, out bool ToDispose)
+        {
+            StopConnection();
+            ToDispose = true;
         }
 
         /// <summary>
