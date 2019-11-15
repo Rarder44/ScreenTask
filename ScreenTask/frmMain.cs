@@ -361,7 +361,7 @@ namespace ScreenTask
 
         private void lblGithub_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/EslaMx7/ScreenTask");
+            Process.Start("https://github.com/Rarder44/ScreenTask");
         }
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)

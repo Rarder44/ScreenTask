@@ -1,30 +1,21 @@
 ## ScreenTask
 ------------------------------
-Desktop App in C# to Share Your Screen With Your Friends Inside The Internal Network.
+Desktop App in C# to Share Your Screen With Your Friends Inside The Internal Network via TCP.
+( edited from: [Screen Task - EslaMx7 ] (https://github.com/EslaMx7/ScreenTask) )
+
+
 ### > [Download Installer (377 KB)](http://goo.gl/gHnPmN)
 
 ### > [Download ZIP Archive (177 KB)](https://raw.githubusercontent.com/EslaMx7/ScreenTask/master/Installer/ScreenTask.zip)
 
 
-**Cross-Platform Version for ( Linux - OSX ) Written in Java :** [**Download Page**](https://github.com/ahmadomar/ScreenTask)
-
 ------------------------------
 ### List Of Features : 
 - Share Your Screen Inside a Network Without Internet Connection (No TeamViewer Anymore)
-- WebUI So Clients Doesn't Need Any Additional Software (Only Web Browser)
-- Make Your Session Private Using Basic Authentication (User::Password)
 - Unlimited Number Of Connected Clients
 
 ------------------------------
 
-### Desktop Application : 
-![Screen Task Main Window](https://raw.githubusercontent.com/EslaMx7/ScreenTask/master/ScreenTask/ScreenTaskMain.png)
-
-### Web UI :
-![Screen Task WebUI](https://raw.githubusercontent.com/EslaMx7/ScreenTask/master/ScreenTask/ScreenTaskWebUI.png)
-
-
-> Mobile View Supported [Thanks to Bootstrap 3]
 
 > .NET Framework 4.5 Required [Download NOW!](http://www.microsoft.com/en-eg/download/details.aspx?id=30653)
 
