@@ -1,7 +1,7 @@
 ## ScreenTask
 ------------------------------
 Desktop App in C# to Share Your Screen With Your Friends Inside The Internal Network via TCP.
-( edited from: [Screen Task - EslaMx7 ] (https://github.com/EslaMx7/ScreenTask) )
+( edited from: [Screen Task - EslaMx7](https://github.com/EslaMx7/ScreenTask) )
 
 
 ### > [Download Installer (377 KB)](http://goo.gl/gHnPmN)
