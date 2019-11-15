@@ -125,7 +125,7 @@ namespace ScreenTask
                     else
                         dp.SerializeToStream(client.GetStream());           
 
-                    INVIARE I DATI IN MANIERA ASINCRONA!!!
+                    //INVIARE I DATI IN MANIERA ASINCRONA!!!
                 }
                 await Task.Delay((int)SleepMSecond);
             }

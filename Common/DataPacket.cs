@@ -16,15 +16,21 @@ namespace Common
 
 
 
-        public void SerializeToStream( Stream s)
+        async public void SerializeToStream( Stream s)
         {
-            BinaryFormatter formatter = new BinaryFormatter(); // the formatter that will serialize my object on my stream 
-            formatter.Serialize(s, this); // the serialization process 
+            using (MemoryStream ms = new MemoryStream())
+            {
+                BinaryFormatter formatter = new BinaryFormatter(); // the formatter that will serialize my object on my stream 
+                formatter.Serialize(ms, this); // the serialization process 
+                byte[] tmp = ms.ToArray();
+                await s.WriteAsync(tmp, 0, tmp.Length);            
+            }
+            
         }
         static public DataPacket DeserializeFromStream(Stream s)
         {
             try
-            {
+            {            
                 BinaryFormatter formatter = new BinaryFormatter(); // the formatter that will serialize my object on my stream 
                 DataPacket dp = (DataPacket)formatter.Deserialize(s);
                 return dp;
