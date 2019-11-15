@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExtendCSharp;
+using ExtendCSharp.Classes;
+
 namespace Client
 {
     public partial class Form1 : Form
@@ -90,23 +92,8 @@ namespace Client
                 }
                 else
                 {
-                    using (MemoryStream img = new MemoryStream())
-                    {
-                        img.Write(p.Data, 0, p.Data.Length);
-                        Bitmap b = new Bitmap(img);
-
-                        try
-                        {
-                            Image old = pictureBox1.Image;
-                            pictureBox1.SetImageInvoke(b);
-                            old.Dispose();
-                        }
-                        catch (Exception ex)
-                        {
-
-                        }
-
-                    }
+                    JPG j = new JPG(p.Data);
+                    jpgPanel1.jpg = j;
                 }
             }
         }

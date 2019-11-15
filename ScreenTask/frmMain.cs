@@ -57,12 +57,14 @@ namespace ScreenTask
         private async void btnStartServer_Click(object sender, EventArgs e)
         {
 
-            if (btnStartServer.Tag.ToString() != "start")
+            if (btnStartServer.Tag.ToString() != "start")           //STOP
             {
                 btnStartServer.Tag = "start";
                 btnStartServer.Text = "Start Server";
                 isWorking = false;
                 isTakingScreenshots = false;
+                if (Listener != null)
+                    Listener.Stop();
                 Log("Server Stoped.");
                 return;
             }
@@ -525,16 +527,8 @@ namespace ScreenTask
             }
         }
 
-        private void lblWebsite_Click(object sender, EventArgs e)
-        {
-            Process.Start("http://eslamx.com");
-        }
 
-        private void lblMe_Click(object sender, EventArgs e)
-        {
-            Process.Start("http://facebook.com/EslaMx7");
-            Process.Start("http://twitter.com/EslaMx7");
-        }
+
 
         private void lblGithub_Click(object sender, EventArgs e)
         {

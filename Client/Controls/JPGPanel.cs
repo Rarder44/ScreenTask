@@ -8,20 +8,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExtendCSharp.Classes;
+using ExtendCSharp;
+
 
 namespace Client.Controls
 {
     public partial class JPGPanel : UserControl
     {
         //TODO: implemento Tiled, Stretched ecc
-        public JPG _jpg;
+        public ImageLayout imageLayout = ImageLayout.Stretch;
+        private JPG _jpg;
         public JPG jpg
         {
             get { return _jpg; } 
             set
             {
                 _jpg = value;
-                this.Refresh();
+                this.Invalidate();
             }
         }
 
@@ -31,9 +34,20 @@ namespace Client.Controls
         }
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
+            //TODO: implemento tutti gli imageLayout
+            
+            if (_jpg == null)
+                return;
 
-            //TODO: stampo l'immagine
+            if(imageLayout==ImageLayout.Stretch)
+            {
+                using(Bitmap bitmap= _jpg.ToBitmap())
+                {
+                    e.Graphics.DrawImage(bitmap, this.Bounds);
+                }
+               
+            }
+            //base.OnPaint(e);
         }
     }
 }

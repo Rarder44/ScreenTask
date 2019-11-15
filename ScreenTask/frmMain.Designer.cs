@@ -54,7 +54,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.numShotEvery = new System.Windows.Forms.NumericUpDown();
             this.lblMe = new System.Windows.Forms.Label();
-            this.lblWebsite = new System.Windows.Forms.Label();
             this.lblGithub = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.imgPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
@@ -351,31 +350,18 @@
             this.lblMe.AutoSize = true;
             this.lblMe.BackColor = System.Drawing.Color.Transparent;
             this.lblMe.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.lblMe.Location = new System.Drawing.Point(468, 391);
+            this.lblMe.Location = new System.Drawing.Point(366, 388);
             this.lblMe.Name = "lblMe";
-            this.lblMe.Size = new System.Drawing.Size(138, 13);
+            this.lblMe.Size = new System.Drawing.Size(242, 13);
             this.lblMe.TabIndex = 32;
-            this.lblMe.Text = "Coded by : Eslam Hamouda";
-            this.lblMe.Click += new System.EventHandler(this.lblMe_Click);
-            // 
-            // lblWebsite
-            // 
-            this.lblWebsite.BackColor = System.Drawing.Color.Transparent;
-            this.lblWebsite.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.lblWebsite.Location = new System.Drawing.Point(33, 384);
-            this.lblWebsite.Name = "lblWebsite";
-            this.lblWebsite.Size = new System.Drawing.Size(180, 24);
-            this.lblWebsite.TabIndex = 33;
-            this.lblWebsite.Text = "2014 | eslamx.com";
-            this.lblWebsite.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.lblWebsite.Click += new System.EventHandler(this.lblWebsite_Click);
+            this.lblMe.Text = "Coded by : Eslam Hamouda - Edited By: Rarder44";
             // 
             // lblGithub
             // 
             this.lblGithub.BackColor = System.Drawing.Color.Transparent;
-            this.lblGithub.Location = new System.Drawing.Point(538, 9);
+            this.lblGithub.Location = new System.Drawing.Point(531, 9);
             this.lblGithub.Name = "lblGithub";
-            this.lblGithub.Size = new System.Drawing.Size(79, 56);
+            this.lblGithub.Size = new System.Drawing.Size(86, 59);
             this.lblGithub.TabIndex = 34;
             this.lblGithub.Click += new System.EventHandler(this.lblGithub_Click);
             // 
@@ -411,7 +397,6 @@
             this.Controls.Add(this.cbPreview);
             this.Controls.Add(this.btnStopServer);
             this.Controls.Add(this.lblGithub);
-            this.Controls.Add(this.lblWebsite);
             this.Controls.Add(this.lblMe);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -456,7 +441,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown numShotEvery;
         private System.Windows.Forms.Label lblMe;
-        private System.Windows.Forms.Label lblWebsite;
         private System.Windows.Forms.Label lblGithub;
     }
 }
