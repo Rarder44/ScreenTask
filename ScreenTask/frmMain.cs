@@ -42,6 +42,7 @@ namespace ScreenTask
         Bitmap LastBitmap = null;
         JPG LastJpeg = null;
         uint JPGQuality;
+        uint SleepMSecond;
 
         public frmMain()
         {
@@ -61,8 +62,7 @@ namespace ScreenTask
             if (btnStartServer.Tag.ToString() != "start")           //STOP
             {
                 btnStartServer.Tag = "start";
-                btnStartServer.Text = "Start Server";
-                
+                btnStartServer.Text = "Start Server"; 
                 StopServer();
                 return;
             }
@@ -75,8 +75,9 @@ namespace ScreenTask
                 isTakingScreenshots = true;
                 isWorking = true;
                 Log("Starting Server, Please Wait...");
+                SleepMSecond = (uint)numShotEvery.Value;
                 await AddFirewallRule((int)numPort.Value);
-                Task.Factory.StartNew(() => CaptureScreenEvery((int)numShotEvery.Value)).Wait();
+                Task.Factory.StartNew(() => CaptureScreenEvery()).Wait();
                 btnStartServer.Tag = "stop";
                 btnStartServer.Text = "Stop Server";
                 await StartServer();
@@ -111,17 +112,22 @@ namespace ScreenTask
             Log("Private Network Socket : " + selectedIP+":"+ Port);
             while (isWorking)
             {
+                
+                if (LastJpeg == null)
+                    continue;
                 DataPacket dp = new DataPacket();
                 dp.Data = LastJpeg.data;
 
                 foreach (TcpClientPlus client in Clients)
                 {
-                    //TODO: controllo se il client è connesso
-                    
-                    dp.SerializeToStream(client.GetStream());
+                    if (!client.Connected)
+                        Client_disconnected(client);
+                    else
+                        dp.SerializeToStream(client.GetStream());           
 
+                    INVIARE I DATI IN MANIERA ASINCRONA!!!
                 }
-                await Task.Delay(30);
+                await Task.Delay((int)SleepMSecond);
             }
 
         }
@@ -146,18 +152,15 @@ namespace ScreenTask
         }
 
 
-        private async Task CaptureScreenEvery(int msec)
+        private async Task CaptureScreenEvery()
         {
             while (isWorking)
             {
                 if (isTakingScreenshots)
                 {
                     TakeScreenshot(isMouseCapture);
-                    msec = (int)numShotEvery.Value;
-                    await Task.Delay(msec);
+                    await Task.Delay((int)SleepMSecond);
                 }
-
-
             }
         }
         
@@ -374,6 +377,11 @@ namespace ScreenTask
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
             JPGQuality = (uint)trackBar1.Value;
+        }
+
+        private void numShotEvery_ValueChanged(object sender, EventArgs e)
+        {
+            SleepMSecond = (uint)numShotEvery.Value;
         }
     }
 }

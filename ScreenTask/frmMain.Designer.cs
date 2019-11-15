@@ -307,6 +307,7 @@
             0,
             0,
             0});
+            this.numShotEvery.ValueChanged += new System.EventHandler(this.numShotEvery_ValueChanged);
             // 
             // lblMe
             // 
