@@ -123,7 +123,7 @@ namespace ScreenTask
                     if (!client.Connected)
                         Client_disconnected(client);
                     else
-                        dp.SerializeToStream(client.GetStream());           
+                        await dp.SerializeToStream(client.GetStream());           
 
                     //INVIARE I DATI IN MANIERA ASINCRONA!!!
                 }

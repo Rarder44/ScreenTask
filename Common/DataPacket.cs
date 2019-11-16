@@ -16,14 +16,14 @@ namespace Common
 
 
 
-        async public void SerializeToStream( Stream s)
+        async public Task SerializeToStream( Stream s)
         {
             using (MemoryStream ms = new MemoryStream())
             {
                 BinaryFormatter formatter = new BinaryFormatter(); // the formatter that will serialize my object on my stream 
                 formatter.Serialize(ms, this); // the serialization process 
                 byte[] tmp = ms.ToArray();
-                await s.WriteAsync(tmp, 0, tmp.Length);            
+                s.WriteAsync(tmp, 0, tmp.Length);  //NON AWAIT! non devo aspettare che termini!          
             }
             
         }
