@@ -90,7 +90,6 @@ namespace Client
         /// </summary>
         private void TaskGetImage()
         {
-            
             while (Connesso)
             {
                 DataPacket p = DataPacket.DeserializeFromStream(connection.GetStream());
@@ -113,7 +112,19 @@ namespace Client
             button1.SetEnableInvoke(enable);
             textBox_IP.SetEnableInvoke(enable);
             numeric_Port.SetEnableInvoke(enable);
+            button2.SetEnableInvoke(!enable);
+        }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (connection != null && connection.Connected)
+                connection.Close();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (connection != null && connection.Connected)
+                connection.Close();
         }
     }
 }

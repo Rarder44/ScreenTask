@@ -118,12 +118,25 @@ namespace ScreenTask
                 DataPacket dp = new DataPacket();
                 dp.Data = LastJpeg.data;
 
-                foreach (TcpClientPlus client in Clients)
+
+
+                foreach (TcpClientPlus client in Clients.ToArray())
                 {
                     if (!client.Connected)
                         Client_disconnected(client);
                     else
-                        await dp.SerializeToStream(client.GetStream());           
+                    {
+                        try
+                        {
+                            await dp.SerializeToStream(client.GetStream());
+                        }
+                        catch(Exception ex)
+                        {
+                            //errore nel'invio, client disconnesso -> rimuovo il client 
+                            Client_disconnected(client);
+                        }
+                    }
+                                 
 
                     //INVIARE I DATI IN MANIERA ASINCRONA!!!
                 }
