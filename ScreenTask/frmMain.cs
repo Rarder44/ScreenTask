@@ -41,6 +41,8 @@ namespace ScreenTask
 
         Bitmap LastBitmap = null;
         JPG LastJpeg = null;
+        bool JpegToSend = false;
+
         uint JPGQuality;
         uint SleepMSecond;
 
@@ -114,11 +116,20 @@ namespace ScreenTask
             {
                 
                 if (LastJpeg == null)
+                {
+                    await Task.Delay(1);
                     continue;
+                }
+                else if (!JpegToSend)
+                {
+                    await Task.Delay((int)SleepMSecond / 2);
+                    continue;
+                }
+
                 DataPacket dp = new DataPacket();
                 dp.Data = LastJpeg.data;
 
-
+                
 
                 foreach (TcpClientPlus client in Clients.ToArray())
                 {
@@ -179,36 +190,51 @@ namespace ScreenTask
         
         private void TakeScreenshot(bool captureMouse)
         {
-            if(LastBitmap!=null )
-                LastBitmap.Dispose();
-           
+            
+
+            Bitmap newBitmap;
 
             if (captureMouse)
             {
-                LastBitmap = ScreenCapturePInvoke.CaptureFullScreen(true);
+                newBitmap = ScreenCapturePInvoke.CaptureFullScreen(true);
                 
             }
             else
             {
                 
                 Rectangle bounds = Screen.GetBounds(Point.Empty);
-                LastBitmap = new Bitmap(bounds.Width,bounds.Height);
+                newBitmap = new Bitmap(bounds.Width,bounds.Height);
                 using (Graphics g = Graphics.FromImage(LastBitmap))
                 {
                     g.CopyFromScreen(Point.Empty, Point.Empty, bounds.Size);
                 }
             }
 
-            LastJpeg = new JPG(LastBitmap, JPGQuality);
-
-            if (isPreview)
+            if(newBitmap!=LastBitmap)           
             {
-                imgPreview.Image = LastBitmap;
+                if (LastBitmap != null)
+                    LastBitmap.Dispose();
+                LastBitmap = newBitmap;
+                JpegToSend = true;
+                if (isPreview)
+                {
+                    imgPreview.Image = LastBitmap;
+                }
             }
-            return;
+            else
+            {
+                JpegToSend = false;
+            }
+
+
+            
+
+            JPG newJPG = new JPG(LastBitmap, JPGQuality);
+            
 
 
 
+            
         }
         private string GetIPv4Address()
         {

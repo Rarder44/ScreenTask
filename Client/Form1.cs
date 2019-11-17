@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExtendCSharp;
 using ExtendCSharp.Classes;
+using System.Diagnostics;
 
 namespace Client
 {
@@ -19,6 +20,8 @@ namespace Client
     {
         TcpClientPlus connection;
         bool Connesso = false;
+
+        int Frame = 0;
 
         public Form1()
         {
@@ -66,6 +69,7 @@ namespace Client
                 connection.StartCheckClose();
                 Connesso = true;
                 new Task(TaskGetImage).Start();
+                new Task(TaskFPS).Start();
                 toolStripStatusLabel1.SetTextInvoke("Connessione effettuata");
                
             }
@@ -101,10 +105,27 @@ namespace Client
                 {
                     JPG j = new JPG(p.Data);
                     jpgPanel1.jpg = j;
+                    Frame++;
                 }
             }
         }
 
+        private void TaskFPS()
+        {
+            Stopwatch sp = new Stopwatch();
+            sp.Start();
+            while(Connesso)
+            {
+               if(sp.ElapsedMilliseconds>1000)
+                {
+                    this.SetTextInvoke(Frame + " FPS");
+                    Frame = 0;
+                    sp.Restart();
+                }
+
+            }
+            sp.Stop();
+        }
 
 
         private void EnableGUI(bool enable)
