@@ -204,7 +204,7 @@ namespace ScreenTask
                 
                 Rectangle bounds = Screen.GetBounds(Point.Empty);
                 newBitmap = new Bitmap(bounds.Width,bounds.Height);
-                using (Graphics g = Graphics.FromImage(LastBitmap))
+                using (Graphics g = Graphics.FromImage(newBitmap))
                 {
                     g.CopyFromScreen(Point.Empty, Point.Empty, bounds.Size);
                 }
@@ -229,7 +229,7 @@ namespace ScreenTask
 
             
 
-            JPG newJPG = new JPG(LastBitmap, JPGQuality);
+            LastJpeg = new JPG(LastBitmap, JPGQuality);
             
 
 
