@@ -355,7 +355,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::ScreenTask.Properties.Resources.ScreenTaskBackground;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(849, 419);
+            this.ClientSize = new System.Drawing.Size(700, 419);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.imgPreview);

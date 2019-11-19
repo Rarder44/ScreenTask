@@ -112,21 +112,23 @@ namespace Client
 
         private void TaskFPS()
         {
-            Stopwatch sp = new Stopwatch();
-            sp.Start();
-            while(Connesso)
+            System.Timers.Timer tt = new System.Timers.Timer();
+            tt.Elapsed += async (sender, e) =>
             {
-               if(sp.ElapsedMilliseconds>1000)
-                {
-                    this.SetTextInvoke(Frame + " FPS");
-                    Frame = 0;
-                    sp.Restart();
-                }
+                if (!Connesso)
+                    tt.Stop();
 
-            }
-            sp.Stop();
+
+                this.SetTextInvoke(Frame + " FPS");
+                Frame = 0;
+            };
+            tt.Interval = 1000;
+            tt.Start();
+
+           
         }
 
+     
 
         private void EnableGUI(bool enable)
         {

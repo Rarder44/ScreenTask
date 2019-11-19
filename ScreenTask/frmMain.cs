@@ -17,7 +17,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using ExtendCSharp;
 namespace ScreenTask
 {
     public partial class frmMain : Form
@@ -209,8 +209,8 @@ namespace ScreenTask
                     g.CopyFromScreen(Point.Empty, Point.Empty, bounds.Size);
                 }
             }
-
-            if(newBitmap!=LastBitmap)           
+            
+            if(!newBitmap.EqualMemCmp(LastBitmap))           
             {
                 if (LastBitmap != null)
                     LastBitmap.Dispose();

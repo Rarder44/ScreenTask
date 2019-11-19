@@ -43,6 +43,8 @@ namespace Client.Controls
             {
                 using(Bitmap bitmap= _jpg.ToBitmap())
                 {
+                    e.Graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+                    e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                     e.Graphics.DrawImage(bitmap, this.Bounds);
                 }
                
