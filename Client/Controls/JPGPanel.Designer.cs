@@ -37,6 +37,7 @@
             this.DoubleBuffered = true;
             this.Name = "JPGPanel";
             this.Size = new System.Drawing.Size(582, 292);
+            this.Resize += new System.EventHandler(this.JPGPanel_Resize);
             this.ResumeLayout(false);
 
         }

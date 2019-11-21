@@ -23,11 +23,29 @@ namespace Client
 
         int Frame = 0;
 
+
+       
         public Form1()
         {
             InitializeComponent();
 
+            //TEST
+            MulticastClient c = new MulticastClient("224.168.100.2", 11000);
+            c.JoinMulticast();
+            c.onReceivedByte += C_onReceivedByte;
+            c.StartListen();
+            DataPacket.onDeserializationComplete += DataPacket_onDeserializationComplete;
+            //TEST
+        }
+
+        private void DataPacket_onDeserializationComplete(DataPacket dp)
+        {
             
+        }
+
+        private void C_onReceivedByte(byte[] data, System.Net.EndPoint remoteEP)
+        {
+            DataPacket.DeserializeAddPacket(data);
         }
 
         private void toolStripStatusLabel1_Click(object sender, EventArgs e)
@@ -39,7 +57,9 @@ namespace Client
         {
             //TODO: implemento  ricerca in rete
             StartConnection();
-           
+
+            
+
         }
 
 

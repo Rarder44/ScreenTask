@@ -56,10 +56,23 @@ namespace ScreenTask
             isPrivateTask = false;
             isPreview = false;
             isMouseCapture = false;
+
+
+          
         }
 
         private async void btnStartServer_Click(object sender, EventArgs e)
         {
+
+            //TEST
+            MulticastClient c = new MulticastClient("224.168.100.2", 11000);
+            c.JoinMulticast();
+            DataPacket dp = new DataPacket();
+            dp.Data = new JPG(new Bitmap(100, 100), 80).data;
+            byte[] data=dp.Serialize();
+            c.SendMessage(data);
+            //TEST
+
 
             if (btnStartServer.Tag.ToString() != "start")           //STOP
             {

@@ -28,10 +28,13 @@ namespace Client.Controls
             }
         }
 
+        BufferedGraphics graphicsBuffer;        //Uso un buffer perchè a quanto pare è più veloce O.o
+
         public JPGPanel()
         {
             InitializeComponent();
         }
+        protected override void OnPaintBackground(PaintEventArgs e) {/* just rely on the bitmap to fill the screen */}
         protected override void OnPaint(PaintEventArgs e)
         {
             //TODO: implemento tutti gli imageLayout
@@ -43,13 +46,24 @@ namespace Client.Controls
             {
                 using(Bitmap bitmap= _jpg.ToBitmap())
                 {
-                    e.Graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
-                    e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                    e.Graphics.DrawImage(bitmap, this.Bounds);
+                    Graphics g = graphicsBuffer.Graphics;
+
+                    g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Low;
+                    g.DrawImage(bitmap, new Rectangle(0, 0, this.Width, this.Height));
+                    graphicsBuffer.Render(e.Graphics);
                 }
                
             }
             //base.OnPaint(e);
+        }
+
+        private void JPGPanel_Resize(object sender, EventArgs e)
+        {
+            using (Graphics graphics = CreateGraphics())
+            {
+                graphicsBuffer = BufferedGraphicsManager.Current.Allocate(graphics, new Rectangle(0, 0, this.Width, this.Height));
+            }
         }
     }
 }
