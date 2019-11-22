@@ -24,7 +24,13 @@ namespace Client.Controls
             set
             {
                 _jpg = value;
-                this.Invalidate();
+                try
+                {
+                    this.Invalidate();
+                }catch (Exception e)
+                {
+
+                }
             }
         }
 

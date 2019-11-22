@@ -61,18 +61,19 @@ namespace ScreenTask
           
         }
 
+        MulticastClient c;
         private async void btnStartServer_Click(object sender, EventArgs e)
         {
 
             //TEST
-            MulticastClient c = new MulticastClient("224.168.100.2", 11000);
-            c.JoinMulticast();
-            DataPacket dp = new DataPacket();
+            c = new MulticastClient("224.168.100.2", 11000,false);
+            c.JoinMulticast(true);
+            /*DataPacket dp = new DataPacket();
             dp.Data = new JPG(new Bitmap(100, 100), 80).data;
             byte[] data=dp.Serialize();
             c.SendMessage(data);
             //TEST
-
+            return;*/
 
             if (btnStartServer.Tag.ToString() != "start")           //STOP
             {
@@ -119,7 +120,7 @@ namespace ScreenTask
 
             Listener = new TcpListenerPlus(selectedIP, Port);
             Listener.ClientConnected += Listener_ClientConnected;
-            Listener.Start();
+            //Listener.Start();
 
             JPGQuality = (uint)trackBar1.Value;
 
@@ -141,30 +142,37 @@ namespace ScreenTask
 
                 DataPacket dp = new DataPacket();
                 dp.Data = LastJpeg.data;
+                byte[] data = dp.Serialize();
+                c.SendMessage(data);
 
-                
 
-                foreach (TcpClientPlus client in Clients.ToArray())
-                {
-                    if (!client.Connected)
-                        Client_disconnected(client);
-                    else
-                    {
-                        try
-                        {
-                            await dp.SerializeToStream(client.GetStream());
-                        }
-                        catch(Exception ex)
-                        {
-                            //errore nel'invio, client disconnesso -> rimuovo il client 
-                            Client_disconnected(client);
-                        }
-                    }
-                                 
+                     /*
+                     DataPacket dp = new DataPacket();
+                     dp.Data = LastJpeg.data;
 
-                    //INVIARE I DATI IN MANIERA ASINCRONA!!!
-                }
-                await Task.Delay((int)SleepMSecond);
+
+
+                     foreach (TcpClientPlus client in Clients.ToArray())
+                     {
+                         if (!client.Connected)
+                             Client_disconnected(client);
+                         else
+                         {
+                             try
+                             {
+                                 await dp.SerializeToStream(client.GetStream());
+                             }
+                             catch(Exception ex)
+                             {
+                                 //errore nel'invio, client disconnesso -> rimuovo il client 
+                                 Client_disconnected(client);
+                             }
+                         }
+
+
+                         //INVIARE I DATI IN MANIERA ASINCRONA!!!
+                     }*/
+                     await Task.Delay((int)SleepMSecond);
             }
 
         }
@@ -424,6 +432,8 @@ namespace ScreenTask
             isWorking = false;
             if(Listener!=null)
                 Listener.Stop();
+
+            c.Dispose();
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)

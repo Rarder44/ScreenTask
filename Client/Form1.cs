@@ -24,14 +24,13 @@ namespace Client
         int Frame = 0;
 
 
-       
+        MulticastClient c;
         public Form1()
         {
             InitializeComponent();
 
             //TEST
-            MulticastClient c = new MulticastClient("224.168.100.2", 11000);
-            c.JoinMulticast();
+             c = new MulticastClient("224.168.100.2", 11000);
             c.onReceivedByte += C_onReceivedByte;
             c.StartListen();
             DataPacket.onDeserializationComplete += DataPacket_onDeserializationComplete;
@@ -40,7 +39,9 @@ namespace Client
 
         private void DataPacket_onDeserializationComplete(DataPacket dp)
         {
-            
+            JPG j = new JPG(dp.Data);
+            jpgPanel1.jpg = j;
+            Frame++;
         }
 
         private void C_onReceivedByte(byte[] data, System.Net.EndPoint remoteEP)
@@ -168,6 +169,8 @@ namespace Client
         {
             if (connection != null && connection.Connected)
                 connection.Close();
+
+            c.Dispose();
         }
     }
 }
