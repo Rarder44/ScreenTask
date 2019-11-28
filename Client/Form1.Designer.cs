@@ -34,7 +34,7 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.numeric_Port = new System.Windows.Forms.NumericUpDown();
             this.button2 = new System.Windows.Forms.Button();
-            this.jpgPanel1 = new Client.Controls.JPGPanel();
+            this.jpgPanel1 = new ExtendCSharp.Controls.JPGPanel();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_Port)).BeginInit();
             this.SuspendLayout();
@@ -147,7 +147,7 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.NumericUpDown numeric_Port;
-        private Controls.JPGPanel jpgPanel1;
+        private ExtendCSharp.Controls.JPGPanel jpgPanel1;
         private System.Windows.Forms.Button button2;
     }
 }

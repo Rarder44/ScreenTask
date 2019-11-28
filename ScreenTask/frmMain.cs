@@ -145,6 +145,7 @@ namespace ScreenTask
                 byte[] data = dp.Serialize();
                 c.SendMessage(data);
 
+                jpgPanel1.jpg = new JPG(DataPacket.DeserializeAddPacket(data).Data);
 
                      /*
                      DataPacket dp = new DataPacket();

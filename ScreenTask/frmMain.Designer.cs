@@ -53,6 +53,7 @@
             this.lblGithub = new System.Windows.Forms.Label();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.label7 = new System.Windows.Forms.Label();
+            this.jpgPanel1 = new ExtendCSharp.Controls.JPGPanel();
             ((System.ComponentModel.ISupportInitialize)(this.imgPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numShotEvery)).BeginInit();
@@ -349,13 +350,22 @@
             this.label7.TabIndex = 36;
             this.label7.Text = "JPG quality";
             // 
+            // jpgPanel1
+            // 
+            this.jpgPanel1.jpg = null;
+            this.jpgPanel1.Location = new System.Drawing.Point(774, 27);
+            this.jpgPanel1.Name = "jpgPanel1";
+            this.jpgPanel1.Size = new System.Drawing.Size(528, 316);
+            this.jpgPanel1.TabIndex = 37;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::ScreenTask.Properties.Resources.ScreenTaskBackground;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(700, 419);
+            this.ClientSize = new System.Drawing.Size(1372, 419);
+            this.Controls.Add(this.jpgPanel1);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.imgPreview);
@@ -422,6 +432,7 @@
         private System.Windows.Forms.Label lblGithub;
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Label label7;
+        private ExtendCSharp.Controls.JPGPanel jpgPanel1;
     }
 }
 

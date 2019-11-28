@@ -30,7 +30,7 @@ namespace Client
             InitializeComponent();
 
             //TEST
-             c = new MulticastClient("224.168.100.2", 11000);
+            c = new MulticastClient("224.168.100.2", 11000);
             c.onReceivedByte += C_onReceivedByte;
             c.StartListen();
             DataPacket.onDeserializationComplete += DataPacket_onDeserializationComplete;
