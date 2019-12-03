@@ -109,7 +109,8 @@ namespace ScreenTask
                 Log("Error! : " + ex.Message);
             }
         }
-    
+
+        //int nJPG = 2;
         private async Task StartServer()
         {
            
@@ -145,7 +146,11 @@ namespace ScreenTask
                 byte[] data = dp.Serialize();
                 c.SendMessage(data);
 
-                jpgPanel1.jpg = new JPG(DataPacket.DeserializeAddPacket(data).Data);
+                //nJPG--; 
+                //if (nJPG == 0)
+                //    return;
+                 
+                     //jpgPanel1.jpg = new JPG(DataPacket.DeserializeAddPacket(data).Data);
 
                      /*
                      DataPacket dp = new DataPacket();
@@ -434,7 +439,8 @@ namespace ScreenTask
             if(Listener!=null)
                 Listener.Stop();
 
-            c.Dispose();
+            if( c!=null)
+                c.Dispose();
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)

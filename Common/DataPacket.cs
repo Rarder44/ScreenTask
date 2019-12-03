@@ -86,19 +86,29 @@ namespace Common
                 onDeserializationComplete?.Invoke(dp);
                 byte[] buf = DeserializeServiceMemory.GetBuffer();
 
-                
-                int numberOfBytesToRemove = ((int)DeserializeServiceMemory.Position/1000 +1)*1000;
+                DeserializeServiceMemory.Dispose();
+                DeserializeServiceMemory = new MemoryStream();
+                /*int numberOfBytesToRemove = (int)DeserializeServiceMemory.Position;
                 if (numberOfBytesToRemove > DeserializeServiceMemory.Length)
                     numberOfBytesToRemove = (int)DeserializeServiceMemory.Length;
                 Buffer.BlockCopy(buf, numberOfBytesToRemove, buf, 0, (int)DeserializeServiceMemory.Length - numberOfBytesToRemove);
                 DeserializeServiceMemory.SetLength(DeserializeServiceMemory.Length - numberOfBytesToRemove);
-
+                */
 
                 return dp;
             }
             catch (Exception e)
             {
+                if(e.Message.StartsWith("Fine"))
+                {
+                    
+                }
+                else
+                {
+
+                }
                 DeserializeServiceMemory.Seek(pos, SeekOrigin.Begin);
+
             }
             finally
             {

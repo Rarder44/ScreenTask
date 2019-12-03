@@ -44,9 +44,17 @@ namespace Client
             Frame++;
         }
 
-        private void C_onReceivedByte(byte[] data, System.Net.EndPoint remoteEP)
+        private void C_onReceivedByte(MemoryStream s, System.Net.EndPoint remoteEP)
         {
-            DataPacket.DeserializeAddPacket(data);
+            s.Seek(0, SeekOrigin.Begin);
+            DataPacket dp=DataPacket.DeserializeFromStream(s);
+            if(dp!=null)
+            {
+                JPG j = new JPG(dp.Data);
+                jpgPanel1.jpg = j;
+                Frame++;
+                
+            }
         }
 
         private void toolStripStatusLabel1_Click(object sender, EventArgs e)
