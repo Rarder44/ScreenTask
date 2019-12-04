@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExtendCSharp.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,6 +20,9 @@ namespace Client
             AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+
+            ServicesManager.RegistService(new NetworkService());
             Application.Run(new Form1());
         }
 

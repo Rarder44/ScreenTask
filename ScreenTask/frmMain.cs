@@ -65,15 +65,10 @@ namespace ScreenTask
         private async void btnStartServer_Click(object sender, EventArgs e)
         {
 
-            //TEST
-            c = new MulticastClient("224.168.100.2", 11000,false);
+            string intfIP= _ips.ElementAt(comboIPs.SelectedIndex).Item2;
+            c = new MulticastClient("224.168.100.2", 11000,intfIP,false);
             c.JoinMulticast(true);
-            /*DataPacket dp = new DataPacket();
-            dp.Data = new JPG(new Bitmap(100, 100), 80).data;
-            byte[] data=dp.Serialize();
-            c.SendMessage(data);
-            //TEST
-            return;*/
+           
 
             if (btnStartServer.Tag.ToString() != "start")           //STOP
             {

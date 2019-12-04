@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.button1 = new System.Windows.Forms.Button();
-            this.textBox_IP = new System.Windows.Forms.TextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.numeric_Port = new System.Windows.Forms.NumericUpDown();
             this.button2 = new System.Windows.Forms.Button();
             this.jpgPanel1 = new ExtendCSharp.Controls.JPGPanel();
+            this.comboIPs = new System.Windows.Forms.ComboBox();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_Port)).BeginInit();
             this.SuspendLayout();
@@ -49,34 +49,27 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // textBox_IP
-            // 
-            this.textBox_IP.Location = new System.Drawing.Point(93, 8);
-            this.textBox_IP.Name = "textBox_IP";
-            this.textBox_IP.Size = new System.Drawing.Size(104, 20);
-            this.textBox_IP.TabIndex = 2;
-            this.textBox_IP.Text = "127.0.0.1";
-            // 
             // statusStrip1
             // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(18, 18);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 428);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 426);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(800, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(800, 24);
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(16, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(18, 19);
             this.toolStripStatusLabel1.Text = "...";
             this.toolStripStatusLabel1.Click += new System.EventHandler(this.toolStripStatusLabel1_Click);
             // 
             // numeric_Port
             // 
-            this.numeric_Port.Location = new System.Drawing.Point(203, 9);
+            this.numeric_Port.Location = new System.Drawing.Point(220, 7);
             this.numeric_Port.Maximum = new decimal(new int[] {
             65536,
             0,
@@ -119,20 +112,29 @@
             this.jpgPanel1.Size = new System.Drawing.Size(776, 390);
             this.jpgPanel1.TabIndex = 5;
             // 
+            // comboIPs
+            // 
+            this.comboIPs.FormattingEnabled = true;
+            this.comboIPs.Location = new System.Drawing.Point(93, 6);
+            this.comboIPs.Name = "comboIPs";
+            this.comboIPs.Size = new System.Drawing.Size(121, 21);
+            this.comboIPs.TabIndex = 6;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.comboIPs);
             this.Controls.Add(this.jpgPanel1);
             this.Controls.Add(this.numeric_Port);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.textBox_IP);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_Port)).EndInit();
@@ -143,12 +145,12 @@
 
         #endregion
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox_IP;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.NumericUpDown numeric_Port;
         private ExtendCSharp.Controls.JPGPanel jpgPanel1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ComboBox comboIPs;
     }
 }
 

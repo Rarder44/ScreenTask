@@ -55,7 +55,25 @@ namespace Common
             }
         }
 
-
+        static public DataPacket Deserialize(byte[] data)
+        {
+            try
+            {
+                using(MemoryStream ms = new MemoryStream())
+                {
+                    ms.Write(data, 0, data.Length);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    BinaryFormatter formatter = new BinaryFormatter(); // the formatter that will serialize my object on my stream 
+                    DataPacket dp = (DataPacket)formatter.Deserialize(ms);
+                    return dp;
+                }
+              
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
 
 
 
