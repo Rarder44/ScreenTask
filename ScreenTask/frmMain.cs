@@ -139,7 +139,7 @@ namespace ScreenTask
                 DataPacket dp = new DataPacket();
                 dp.Data = LastJpeg.data;
                 byte[] data = dp.Serialize();
-                c.SendMessage(data);
+                c.SendGroup(data);
 
                 //nJPG--; 
                 //if (nJPG == 0)
@@ -231,17 +231,13 @@ namespace ScreenTask
                     g.CopyFromScreen(Point.Empty, Point.Empty, bounds.Size);
                 }
             }
-            
+
             if(!newBitmap.EqualMemCmp(LastBitmap))           
             {
                 if (LastBitmap != null)
                     LastBitmap.Dispose();
                 LastBitmap = newBitmap;
                 JpegToSend = true;
-                if (isPreview)
-                {
-                    imgPreview.Image = LastBitmap;
-                }
             }
             else
             {
@@ -249,14 +245,16 @@ namespace ScreenTask
             }
 
 
-            
 
             LastJpeg = new JPG(LastBitmap, JPGQuality);
-            
+            if (isPreview)
+            {
+                jpgPreview.jpg = LastJpeg;
+            }
 
 
 
-            
+
         }
         private string GetIPv4Address()
         {
@@ -337,24 +335,7 @@ namespace ScreenTask
 
         }
 
-
-
-        private void cbPrivate_CheckedChanged(object sender, EventArgs e)
-        {
-            if (cbPrivate.Checked == true)
-            {
-                txtUser.Enabled = true;
-                txtPassword.Enabled = true;
-                isPrivateTask = true;
-            }
-            else
-            {
-                txtUser.Enabled = false;
-                txtPassword.Enabled = false;
-                isPrivateTask = false;
-            }
-        }
-
+               
         private void cbPreview_CheckedChanged(object sender, EventArgs e)
         {
             if (cbPreview.Checked == true)
@@ -364,7 +345,6 @@ namespace ScreenTask
             else
             {
                 isPreview = false;
-                imgPreview.Image = imgPreview.InitialImage;
             }
         }
 
@@ -396,17 +376,7 @@ namespace ScreenTask
             comboIPs.SelectedIndex = comboIPs.Items.Count - 1;
         }
 
-        private void imgPreview_Click(object sender, EventArgs e)
-        {
-            if (imgPreview.Dock == DockStyle.None)
-            {
-                imgPreview.Dock = DockStyle.Fill;
-            }
-            else
-            {
-                imgPreview.Dock = DockStyle.None;
-            }
-        }
+
 
         private void cbScreenshotEvery_CheckedChanged(object sender, EventArgs e)
         {
@@ -446,6 +416,16 @@ namespace ScreenTask
         private void numShotEvery_ValueChanged(object sender, EventArgs e)
         {
             SleepMSecond = (uint)numShotEvery.Value;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void panel1_MouseClick(object sender, MouseEventArgs e)
+        {
+            Process.Start("https://github.com/Rarder44/ScreenTask");
         }
     }
 }

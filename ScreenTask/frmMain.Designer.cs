@@ -30,17 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.txtLog = new System.Windows.Forms.TextBox();
-            this.imgPreview = new System.Windows.Forms.PictureBox();
             this.comboIPs = new System.Windows.Forms.ComboBox();
             this.cbCaptureMouse = new System.Windows.Forms.CheckBox();
             this.cbPreview = new System.Windows.Forms.CheckBox();
-            this.btnStopServer = new System.Windows.Forms.Button();
             this.btnStartServer = new System.Windows.Forms.Button();
-            this.txtPassword = new System.Windows.Forms.TextBox();
-            this.txtUser = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.cbPrivate = new System.Windows.Forms.CheckBox();
             this.numPort = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.txtURL = new System.Windows.Forms.TextBox();
@@ -50,10 +43,10 @@
             this.label6 = new System.Windows.Forms.Label();
             this.numShotEvery = new System.Windows.Forms.NumericUpDown();
             this.lblMe = new System.Windows.Forms.Label();
-            this.lblGithub = new System.Windows.Forms.Label();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.label7 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.imgPreview)).BeginInit();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.jpgPreview = new ExtendCSharp.Controls.JPGPanel();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numShotEvery)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
@@ -61,32 +54,20 @@
             // 
             // txtLog
             // 
-            this.txtLog.Location = new System.Drawing.Point(6, 236);
+            this.txtLog.Location = new System.Drawing.Point(6, 253);
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLog.Size = new System.Drawing.Size(379, 139);
+            this.txtLog.Size = new System.Drawing.Size(380, 139);
             this.txtLog.TabIndex = 3;
             this.txtLog.TextChanged += new System.EventHandler(this.txtLog_TextChanged);
-            // 
-            // imgPreview
-            // 
-            this.imgPreview.Image = global::ScreenTask.Properties.Resources.imgPrev;
-            this.imgPreview.InitialImage = global::ScreenTask.Properties.Resources.imgPrev;
-            this.imgPreview.Location = new System.Drawing.Point(398, 235);
-            this.imgPreview.Name = "imgPreview";
-            this.imgPreview.Size = new System.Drawing.Size(210, 140);
-            this.imgPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.imgPreview.TabIndex = 4;
-            this.imgPreview.TabStop = false;
-            this.imgPreview.Click += new System.EventHandler(this.imgPreview_Click);
             // 
             // comboIPs
             // 
             this.comboIPs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboIPs.FormattingEnabled = true;
-            this.comboIPs.Location = new System.Drawing.Point(47, 87);
+            this.comboIPs.Location = new System.Drawing.Point(48, 86);
             this.comboIPs.Name = "comboIPs";
             this.comboIPs.Size = new System.Drawing.Size(215, 21);
             this.comboIPs.TabIndex = 27;
@@ -95,7 +76,7 @@
             // 
             this.cbCaptureMouse.AutoSize = true;
             this.cbCaptureMouse.BackColor = System.Drawing.Color.Transparent;
-            this.cbCaptureMouse.Location = new System.Drawing.Point(400, 155);
+            this.cbCaptureMouse.Location = new System.Drawing.Point(12, 179);
             this.cbCaptureMouse.Name = "cbCaptureMouse";
             this.cbCaptureMouse.Size = new System.Drawing.Size(152, 19);
             this.cbCaptureMouse.TabIndex = 26;
@@ -107,7 +88,7 @@
             // 
             this.cbPreview.AutoSize = true;
             this.cbPreview.BackColor = System.Drawing.Color.Transparent;
-            this.cbPreview.Location = new System.Drawing.Point(400, 216);
+            this.cbPreview.Location = new System.Drawing.Point(392, 228);
             this.cbPreview.Name = "cbPreview";
             this.cbPreview.Size = new System.Drawing.Size(69, 19);
             this.cbPreview.TabIndex = 25;
@@ -115,27 +96,13 @@
             this.cbPreview.UseVisualStyleBackColor = false;
             this.cbPreview.CheckedChanged += new System.EventHandler(this.cbPreview_CheckedChanged);
             // 
-            // btnStopServer
-            // 
-            this.btnStopServer.BackColor = System.Drawing.Color.Maroon;
-            this.btnStopServer.Enabled = false;
-            this.btnStopServer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStopServer.ForeColor = System.Drawing.Color.White;
-            this.btnStopServer.Location = new System.Drawing.Point(152, 196);
-            this.btnStopServer.Name = "btnStopServer";
-            this.btnStopServer.Size = new System.Drawing.Size(130, 23);
-            this.btnStopServer.TabIndex = 24;
-            this.btnStopServer.Text = "Stop Server";
-            this.btnStopServer.UseVisualStyleBackColor = false;
-            this.btnStopServer.Visible = false;
-            // 
             // btnStartServer
             // 
             this.btnStartServer.BackColor = System.Drawing.Color.Gray;
             this.btnStartServer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnStartServer.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Bold);
             this.btnStartServer.ForeColor = System.Drawing.Color.White;
-            this.btnStartServer.Location = new System.Drawing.Point(114, 192);
+            this.btnStartServer.Location = new System.Drawing.Point(77, 217);
             this.btnStartServer.Name = "btnStartServer";
             this.btnStartServer.Size = new System.Drawing.Size(202, 30);
             this.btnStartServer.TabIndex = 23;
@@ -144,60 +111,9 @@
             this.btnStartServer.UseVisualStyleBackColor = false;
             this.btnStartServer.Click += new System.EventHandler(this.btnStartServer_Click);
             // 
-            // txtPassword
-            // 
-            this.txtPassword.Enabled = false;
-            this.txtPassword.Location = new System.Drawing.Point(319, 156);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(66, 20);
-            this.txtPassword.TabIndex = 22;
-            this.txtPassword.Text = "task";
-            // 
-            // txtUser
-            // 
-            this.txtUser.Enabled = false;
-            this.txtUser.Location = new System.Drawing.Point(183, 156);
-            this.txtUser.Name = "txtUser";
-            this.txtUser.Size = new System.Drawing.Size(66, 20);
-            this.txtUser.TabIndex = 21;
-            this.txtUser.Text = "screen";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Location = new System.Drawing.Point(255, 159);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(70, 15);
-            this.label4.TabIndex = 20;
-            this.label4.Text = "Password : ";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Location = new System.Drawing.Point(147, 159);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(42, 15);
-            this.label3.TabIndex = 19;
-            this.label3.Text = "User : ";
-            // 
-            // cbPrivate
-            // 
-            this.cbPrivate.AutoSize = true;
-            this.cbPrivate.BackColor = System.Drawing.Color.Transparent;
-            this.cbPrivate.Location = new System.Drawing.Point(47, 158);
-            this.cbPrivate.Name = "cbPrivate";
-            this.cbPrivate.Size = new System.Drawing.Size(95, 19);
-            this.cbPrivate.TabIndex = 18;
-            this.cbPrivate.Text = "Private Task ";
-            this.cbPrivate.UseVisualStyleBackColor = false;
-            this.cbPrivate.CheckedChanged += new System.EventHandler(this.cbPrivate_CheckedChanged);
-            // 
             // numPort
             // 
-            this.numPort.Location = new System.Drawing.Point(307, 88);
+            this.numPort.Location = new System.Drawing.Point(308, 87);
             this.numPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -221,7 +137,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Location = new System.Drawing.Point(268, 90);
+            this.label2.Location = new System.Drawing.Point(269, 89);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 15);
             this.label2.TabIndex = 16;
@@ -229,7 +145,7 @@
             // 
             // txtURL
             // 
-            this.txtURL.Location = new System.Drawing.Point(47, 117);
+            this.txtURL.Location = new System.Drawing.Point(48, 116);
             this.txtURL.Name = "txtURL";
             this.txtURL.ReadOnly = true;
             this.txtURL.Size = new System.Drawing.Size(338, 20);
@@ -240,7 +156,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Location = new System.Drawing.Point(8, 118);
+            this.label1.Location = new System.Drawing.Point(9, 117);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 15);
             this.label1.TabIndex = 14;
@@ -250,7 +166,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.BackColor = System.Drawing.Color.Transparent;
-            this.label5.Location = new System.Drawing.Point(11, 88);
+            this.label5.Location = new System.Drawing.Point(12, 87);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(24, 15);
             this.label5.TabIndex = 28;
@@ -262,7 +178,7 @@
             this.cbScreenshotEvery.BackColor = System.Drawing.Color.Transparent;
             this.cbScreenshotEvery.Checked = true;
             this.cbScreenshotEvery.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbScreenshotEvery.Location = new System.Drawing.Point(400, 86);
+            this.cbScreenshotEvery.Location = new System.Drawing.Point(13, 154);
             this.cbScreenshotEvery.Name = "cbScreenshotEvery";
             this.cbScreenshotEvery.Size = new System.Drawing.Size(156, 19);
             this.cbScreenshotEvery.TabIndex = 29;
@@ -274,7 +190,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.BackColor = System.Drawing.Color.Transparent;
-            this.label6.Location = new System.Drawing.Point(501, 118);
+            this.label6.Location = new System.Drawing.Point(255, 155);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(70, 15);
             this.label6.TabIndex = 31;
@@ -287,7 +203,7 @@
             0,
             0,
             0});
-            this.numShotEvery.Location = new System.Drawing.Point(421, 116);
+            this.numShotEvery.Location = new System.Drawing.Point(175, 153);
             this.numShotEvery.Maximum = new decimal(new int[] {
             999999,
             0,
@@ -313,25 +229,16 @@
             // 
             this.lblMe.AutoSize = true;
             this.lblMe.BackColor = System.Drawing.Color.Transparent;
-            this.lblMe.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.lblMe.Location = new System.Drawing.Point(366, 388);
+            this.lblMe.ForeColor = System.Drawing.Color.Black;
+            this.lblMe.Location = new System.Drawing.Point(305, 395);
             this.lblMe.Name = "lblMe";
             this.lblMe.Size = new System.Drawing.Size(279, 15);
             this.lblMe.TabIndex = 32;
             this.lblMe.Text = "Coded by : Eslam Hamouda - Edited By: Rarder44";
             // 
-            // lblGithub
-            // 
-            this.lblGithub.BackColor = System.Drawing.Color.Transparent;
-            this.lblGithub.Location = new System.Drawing.Point(531, 9);
-            this.lblGithub.Name = "lblGithub";
-            this.lblGithub.Size = new System.Drawing.Size(86, 59);
-            this.lblGithub.TabIndex = 34;
-            this.lblGithub.Click += new System.EventHandler(this.lblGithub_Click);
-            // 
             // trackBar1
             // 
-            this.trackBar1.Location = new System.Drawing.Point(648, 192);
+            this.trackBar1.Location = new System.Drawing.Point(551, 143);
             this.trackBar1.Maximum = 100;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Orientation = System.Windows.Forms.Orientation.Vertical;
@@ -343,30 +250,46 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(633, 176);
+            this.label7.Location = new System.Drawing.Point(536, 125);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(68, 15);
             this.label7.TabIndex = 36;
             this.label7.Text = "JPG quality";
             // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.BackgroundImage = global::ScreenTask.Properties.Resources.github_logo;
+            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.panel1.Location = new System.Drawing.Point(536, 8);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(72, 60);
+            this.panel1.TabIndex = 38;
+            this.panel1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseClick);
+            // 
+            // jpgPreview
+            // 
+            this.jpgPreview.jpg = null;
+            this.jpgPreview.Location = new System.Drawing.Point(392, 253);
+            this.jpgPreview.Name = "jpgPreview";
+            this.jpgPreview.Size = new System.Drawing.Size(209, 139);
+            this.jpgPreview.TabIndex = 39;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::ScreenTask.Properties.Resources.ScreenTaskBackground;
+            this.BackColor = System.Drawing.Color.DarkGray;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(713, 419);
+            this.ClientSize = new System.Drawing.Size(613, 419);
+            this.Controls.Add(this.jpgPreview);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.trackBar1);
-            this.Controls.Add(this.imgPreview);
             this.Controls.Add(this.txtLog);
-            this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.btnStartServer);
-            this.Controls.Add(this.txtUser);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.cbPrivate);
             this.Controls.Add(this.txtURL);
             this.Controls.Add(this.numPort);
             this.Controls.Add(this.label2);
@@ -377,8 +300,6 @@
             this.Controls.Add(this.cbScreenshotEvery);
             this.Controls.Add(this.cbCaptureMouse);
             this.Controls.Add(this.cbPreview);
-            this.Controls.Add(this.btnStopServer);
-            this.Controls.Add(this.lblGithub);
             this.Controls.Add(this.lblMe);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -388,7 +309,6 @@
             this.Text = "Screen Task";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.Load += new System.EventHandler(this.frmMain_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.imgPreview)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numShotEvery)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
@@ -399,17 +319,10 @@
 
         #endregion
         private System.Windows.Forms.TextBox txtLog;
-        private System.Windows.Forms.PictureBox imgPreview;
         private System.Windows.Forms.ComboBox comboIPs;
         private System.Windows.Forms.CheckBox cbCaptureMouse;
         private System.Windows.Forms.CheckBox cbPreview;
-        private System.Windows.Forms.Button btnStopServer;
         private System.Windows.Forms.Button btnStartServer;
-        private System.Windows.Forms.TextBox txtPassword;
-        private System.Windows.Forms.TextBox txtUser;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.CheckBox cbPrivate;
         private System.Windows.Forms.NumericUpDown numPort;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtURL;
@@ -419,9 +332,10 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown numShotEvery;
         private System.Windows.Forms.Label lblMe;
-        private System.Windows.Forms.Label lblGithub;
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Panel panel1;
+        private ExtendCSharp.Controls.JPGPanel jpgPreview;
     }
 }
 

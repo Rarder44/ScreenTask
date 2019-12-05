@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="imgPrev.png" />
+    <None Include="Resources\github-logo.png" />
     <Content Include="screenicon.ico" />
     <Content Include="ScreenTaskBackground.png" />
     <Content Include="ScreenTaskMain.png" />
