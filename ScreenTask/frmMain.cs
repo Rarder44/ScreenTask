@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExtendCSharp;
 using ExtendCSharp.Services;
+using System.Reflection;
 
 namespace ScreenTask
 {
@@ -29,8 +30,6 @@ namespace ScreenTask
      - dividere meglio quello che fa il bottone start e la StartServer
      - creare task dedicati per la gestione dell'invio dei dati e per il web server
 
-
-         
          */
     public partial class frmMain : Form
     {
@@ -43,7 +42,7 @@ namespace ScreenTask
         private MemoryStream img;
         private List<Tuple<string, string>> _ips;
         HttpListener serv;
-
+        String MulticastAddress = "224.168.100.2";
 
         Bitmap LastBitmap = null;
         JPG LastJpeg = null;
@@ -55,23 +54,21 @@ namespace ScreenTask
         public frmMain()
         {
             InitializeComponent();
-            serv = new HttpListener();
-            serv.IgnoreWriteExceptions = true; // Seems Had No Effect :(
             img = new MemoryStream();
             isPreview = false;
             isMouseCapture = false;
 
 
             ServicesManager.RegistService(new NetworkService());
+            ServicesManager.RegistService(new SystemService());
+            
+            ServicesManager.RegistService(new ResourcesService(System.Reflection.Assembly.GetExecutingAssembly()));
         }
 
         MulticastClient c;
         private async void btnStartServer_Click(object sender, EventArgs e)
         {
 
-            string intfIP= _ips.ElementAt(comboIPs.SelectedIndex).Item2;
-            c = new MulticastClient("224.168.100.2", 11000,intfIP,false);
-            c.JoinMulticast(true);
            
 
             if (btnStartServer.Tag.ToString() != "start")           //STOP
@@ -85,7 +82,7 @@ namespace ScreenTask
             try
             {
 
-
+                serv = new HttpListener();
                 serv.IgnoreWriteExceptions = true;
                 isTakingScreenshots = true;
                 isWorking = true;
@@ -93,6 +90,7 @@ namespace ScreenTask
                 SleepMSecond = (uint)numShotEvery.Value;
                 await AddFirewallRule((int)numPort.Value);
                 Task.Factory.StartNew(() => CaptureScreenEvery()).Wait();
+                Task.Factory.StartNew(() => WebServer()).Wait();
                 btnStartServer.Tag = "stop";
                 btnStartServer.Text = "Stop Server";
                 await StartServer();
@@ -109,17 +107,22 @@ namespace ScreenTask
             }
         }
 
+
+     
         private async Task StartServer()
         {
-           
+
             String selectedIP = _ips.ElementAt(comboIPs.SelectedIndex).Item2;
             int Port = (int)numPort.Value;
-
-
+            c = new MulticastClient(MulticastAddress, Port, selectedIP, false);
+            c.JoinMulticast(true);
+            
             JPGQuality = (uint)trackBar1.Value;
 
             Log("Server Started Successfuly!");
-            Log("Private Network Socket : " + selectedIP+":"+ Port);
+            Log("Multicast socket : " + MulticastAddress+":"+ Port);
+            Log("Output interface: " + selectedIP);
+            
             while (isWorking)
             {
                 
@@ -135,7 +138,7 @@ namespace ScreenTask
                 }
 
                
-                c.SendGroup(LastJpeg.data);
+                c.SendGroup(LastJpeg.data,(ulong)DateTimeOffset.Now.ToUnixTimeMilliseconds());
 
                 
                  
@@ -145,48 +148,53 @@ namespace ScreenTask
         }
 
 
-        //TODO: DA FINIRE
         private async Task WebServer(int portWebServer = 80)
         {
             serv.Prefixes.Clear();
-            //serv.Prefixes.Add("http://localhost:" + numPort.Value.ToString() + "/");
-            serv.Prefixes.Add("http://*:" + portWebServer + "/"); // Uncomment this to Allow Public IP Over Internet. [Commented for Security Reasons.]
-            //serv.Prefixes.Add(url + "/");
+            string Address = "http://*:" + portWebServer + "/";
+            serv.Prefixes.Add(Address);
+            Log("Download address "+ Address);
             serv.Start();
+
+           
+
             while (isWorking)
             {
                 var ctx = await serv.GetContextAsync();
-                //Screenshot();
-                var resPath = ctx.Request.Url.LocalPath;
-                if (resPath == "/") // Route The Root Dir to the Index Page
-                    resPath += "index.html";
-                var page = Application.StartupPath + "/WebServer" + resPath;
-                bool fileExist;
 
-                fileExist = File.Exists(page);
-                if (!fileExist)
+
+                //qualsiasi richiesta la ridireziono sul download del file
+                FilePlus client = ServicesManager.Get<ResourcesService>().GetObject<FilePlus>("Client.exe");
+                client.Extension = ".exe";
+                client.Name = "Client";
+
+
+                ctx.Response.ContentType = "application/octet-stream";
+                ctx.Response.AddHeader("Content-disposition", "attachment; filename=Client.exe");
+
+                ctx.Response.StatusCode = 200;
+                try
                 {
-                    var errorPage = Encoding.UTF8.GetBytes("<h1 style=\"color:red\">Error 404 , File Not Found </h1><hr><a href=\".\\\">Back to Home</a>");
-                    ctx.Response.ContentType = "text/html";
-                    ctx.Response.StatusCode = 404;
-                    try
-                    {
-                        await ctx.Response.OutputStream.WriteAsync(errorPage, 0, errorPage.Length);
-                    }
-                    catch (Exception ex)
-                    {
 
-
-                    }
-                    ctx.Response.Close();
-                    continue;
+                    //TODO: mi sa che non devo fare await
+                    await ctx.Response.OutputStream.WriteAsync(client.data, 0,  client.data.Length);
                 }
+                catch (Exception ex)
+                {
+                  
+                        //Do Nothing !!! this is the Only Effective Solution for this Exception : the specified network name is no longer available
+                }
+
+                ctx.Response.Close();
             }
+
+            serv.Stop();
         }
         private void StopServer()
         {
             isWorking = false;
             isTakingScreenshots = false;
+            serv.Close();
             Log("Server Stoped.");
         }
        
@@ -295,7 +303,7 @@ namespace ScreenTask
         }
         private void Log(string text)
         {
-            txtLog.Text += DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString() + " : " + text + "\r\n";
+            txtLog.AppendTextInvoke(DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString() + " : " + text + "\r\n");
 
         }
 

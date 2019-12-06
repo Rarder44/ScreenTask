@@ -113,9 +113,17 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
     <ItemGroup>
+	<!-- Inclusione automatica delle DLL -->
       <EmbeddedResource Include="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.Extension)' == '.dll'">
         <LogicalName>%(ReferenceCopyLocalPaths.DestinationSubDirectory)%(ReferenceCopyLocalPaths.Filename)%(ReferenceCopyLocalPaths.Extension)</LogicalName>
       </EmbeddedResource>
+	  
+	  <!-- Inclusione automatica del client-->
+	  <EmbeddedResource Include="..\COMPILATI\$(Configuration)\Client.exe">
+        <LogicalName>Client.exe</LogicalName>
+      </EmbeddedResource>
+	  
+	  
     </ItemGroup>
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

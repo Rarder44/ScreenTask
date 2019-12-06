@@ -28,7 +28,7 @@ namespace Client
     {
         bool Connesso = false;
         int Frame = 0;
-
+        String MulticastAddress = "224.168.100.2";
         MulticastClient c;
         List<Tuple<string, string>> _ips;
 
@@ -75,12 +75,13 @@ namespace Client
                 EnableGUI(false);
 
                 string intfIP = _ips.ElementAt(comboIPs.SelectedIndex).Item2;
+                int Port = (int)numeric_Port.Value;
                 Connesso = true;
 
                 if (c != null)
                     c.Dispose();
 
-                c = new MulticastClient("224.168.100.2", 11000, intfIP);
+                c = new MulticastClient(MulticastAddress, Port, intfIP);
                 c.onReceivedByte += C_onReceivedByte;
                 c.StartListen();
 
@@ -121,6 +122,7 @@ namespace Client
         {
             button1.SetEnableInvoke(enable);
             numeric_Port.SetEnableInvoke(enable);
+            comboIPs.SetEnableInvoke(enable);
             button2.SetEnableInvoke(!enable);
         }
 
