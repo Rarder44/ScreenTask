@@ -372,9 +372,7 @@ namespace ScreenTask
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            isWorking = false;
-            if( c!=null)
-                c.Dispose();
+            StopServer();
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
@@ -391,6 +389,18 @@ namespace ScreenTask
         private void panel1_MouseClick(object sender, MouseEventArgs e)
         {
             Process.Start("https://github.com/Rarder44/ScreenTask");
+        }
+
+        private void jpgPreview_DoubleClick(object sender, EventArgs e)
+        {
+            if(jpgPreview.Dock == DockStyle.None)
+            {
+                jpgPreview.Dock = DockStyle.Fill;
+            }
+            else
+            {
+                jpgPreview.Dock = DockStyle.None;
+            }
         }
     }
 }

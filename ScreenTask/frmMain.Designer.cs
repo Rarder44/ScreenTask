@@ -275,6 +275,7 @@
             this.jpgPreview.Name = "jpgPreview";
             this.jpgPreview.Size = new System.Drawing.Size(209, 139);
             this.jpgPreview.TabIndex = 39;
+            this.jpgPreview.DoubleClick += new System.EventHandler(this.jpgPreview_DoubleClick);
             // 
             // frmMain
             // 
