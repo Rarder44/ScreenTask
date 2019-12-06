@@ -1,4 +1,4 @@
-﻿using ExtendCSharp.Services;
+﻿
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,7 +22,9 @@ namespace Client
             Application.SetCompatibleTextRenderingDefault(false);
 
 
-            ServicesManager.RegistService(new NetworkService());
+            //Non posso generare qua i servizi, altrimenti mi carica la ExtendCSharp prima del OnResolveAssembly 
+            //-> li carico nel load/costruttore del form
+            //ExtendCSharp.Services.ServicesManager.RegistService(new ExtendCSharp.Services.NetworkService());
             Application.Run(new Form1());
         }
 

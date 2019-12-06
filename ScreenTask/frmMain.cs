@@ -1,4 +1,4 @@
-﻿using Common;
+﻿
 using ExtendCSharp.Classes;
 using ExtendCSharp.ExtendedClass;
 using System;
@@ -18,25 +18,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExtendCSharp;
+using ExtendCSharp.Services;
+
 namespace ScreenTask
 {
     public partial class frmMain : Form
     {
         private bool isWorking;
         private bool isTakingScreenshots;
-        private bool isPrivateTask;
         private bool isPreview;
         private bool isMouseCapture;
 
-        private object locker = new object();
-        private ReaderWriterLock rwl = new ReaderWriterLock();
+        
         private MemoryStream img;
         private List<Tuple<string, string>> _ips;
         HttpListener serv;
-
-
-        List<TcpClientPlus> Clients = new List<TcpClientPlus>();
-        TcpListenerPlus Listener = null;
 
 
         Bitmap LastBitmap = null;
@@ -53,12 +49,11 @@ namespace ScreenTask
             serv = new HttpListener();
             serv.IgnoreWriteExceptions = true; // Seems Had No Effect :(
             img = new MemoryStream();
-            isPrivateTask = false;
             isPreview = false;
             isMouseCapture = false;
 
 
-          
+            ServicesManager.RegistService(new NetworkService());
         }
 
         MulticastClient c;
@@ -105,18 +100,13 @@ namespace ScreenTask
             }
         }
 
-        //int nJPG = 2;
         private async Task StartServer()
         {
            
             String selectedIP = _ips.ElementAt(comboIPs.SelectedIndex).Item2;
             int Port = (int)numPort.Value;
 
-            Clients.Clear();
-
-            Listener = new TcpListenerPlus(selectedIP, Port);
-            Listener.ClientConnected += Listener_ClientConnected;
-            //Listener.Start();
+         
 
             JPGQuality = (uint)trackBar1.Value;
 
@@ -136,43 +126,12 @@ namespace ScreenTask
                     continue;
                 }
 
-                DataPacket dp = new DataPacket();
-                dp.Data = LastJpeg.data;
-                byte[] data = dp.Serialize();
-                c.SendGroup(data);
+               
+                c.SendGroup(LastJpeg.data);
 
-                //nJPG--; 
-                //if (nJPG == 0)
-                //    return;
+                
                  
-                     //jpgPanel1.jpg = new JPG(DataPacket.DeserializeAddPacket(data).Data);
-
-                     /*
-                     DataPacket dp = new DataPacket();
-                     dp.Data = LastJpeg.data;
-
-
-
-                     foreach (TcpClientPlus client in Clients.ToArray())
-                     {
-                         if (!client.Connected)
-                             Client_disconnected(client);
-                         else
-                         {
-                             try
-                             {
-                                 await dp.SerializeToStream(client.GetStream());
-                             }
-                             catch(Exception ex)
-                             {
-                                 //errore nel'invio, client disconnesso -> rimuovo il client 
-                                 Client_disconnected(client);
-                             }
-                         }
-
-
-                         //INVIARE I DATI IN MANIERA ASINCRONA!!!
-                     }*/
+                    
                      await Task.Delay((int)SleepMSecond);
             }
 
@@ -181,21 +140,9 @@ namespace ScreenTask
         {
             isWorking = false;
             isTakingScreenshots = false;
-            if (Listener != null)
-                Listener.Stop();
-            foreach (TcpClientPlus client in Clients)
-                client.Close();
             Log("Server Stoped.");
         }
-        private void Listener_ClientConnected(TcpClientPlus client)
-        {
-            Clients.Add(client);
-        }
-
-        private void Client_disconnected(TcpClientPlus client)
-        {
-            Clients.Remove(client);
-        }
+       
 
 
         private async Task CaptureScreenEvery()
@@ -256,37 +203,7 @@ namespace ScreenTask
 
 
         }
-        private string GetIPv4Address()
-        {
-            string IP4Address = String.Empty;
-
-            foreach (IPAddress IPA in Dns.GetHostAddresses(Dns.GetHostName()))
-            {
-                if (IPA.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    IP4Address = IPA.ToString();
-                    break;
-                }
-            }
-
-            return IP4Address;
-        }
-        private List<Tuple<string, string>> GetAllIPv4Addresses()
-        {
-            List<Tuple<string, string>> ipList = new List<Tuple<string, string>>();
-            foreach (var ni in NetworkInterface.GetAllNetworkInterfaces())
-            {
-
-                foreach (var ua in ni.GetIPProperties().UnicastAddresses)
-                {
-                    if (ua.Address.AddressFamily == AddressFamily.InterNetwork)
-                    {
-                        ipList.Add(Tuple.Create(ni.Name, ua.Address.ToString()));
-                    }
-                }
-            }
-            return ipList;
-        }
+    
         private Task AddFirewallRule(int port)
         {
             return Task.Run(() =>
@@ -368,7 +285,7 @@ namespace ScreenTask
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            _ips = GetAllIPv4Addresses();
+            _ips = ServicesManager.Get< NetworkService>().GetAllIPv4Addresses();
             foreach (var ip in _ips)
             {
                 comboIPs.Items.Add(ip.Item2 + " - " + ip.Item1);
@@ -401,9 +318,6 @@ namespace ScreenTask
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             isWorking = false;
-            if(Listener!=null)
-                Listener.Stop();
-
             if( c!=null)
                 c.Dispose();
         }
@@ -418,10 +332,6 @@ namespace ScreenTask
             SleepMSecond = (uint)numShotEvery.Value;
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-           
-        }
 
         private void panel1_MouseClick(object sender, MouseEventArgs e)
         {
