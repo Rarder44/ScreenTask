@@ -22,6 +22,16 @@ using ExtendCSharp.Services;
 
 namespace ScreenTask
 {
+
+    /* 
+     TODO:
+     - la porta non è decisa dalla textbox 
+     - dividere meglio quello che fa il bottone start e la StartServer
+     - creare task dedicati per la gestione dell'invio dei dati e per il web server
+
+
+         
+         */
     public partial class frmMain : Form
     {
         private bool isWorking;
@@ -45,7 +55,6 @@ namespace ScreenTask
         public frmMain()
         {
             InitializeComponent();
-            CheckForIllegalCrossThreadCalls = false; // For Visual Studio Debuging Only !
             serv = new HttpListener();
             serv.IgnoreWriteExceptions = true; // Seems Had No Effect :(
             img = new MemoryStream();
@@ -106,7 +115,6 @@ namespace ScreenTask
             String selectedIP = _ips.ElementAt(comboIPs.SelectedIndex).Item2;
             int Port = (int)numPort.Value;
 
-         
 
             JPGQuality = (uint)trackBar1.Value;
 
@@ -131,10 +139,49 @@ namespace ScreenTask
 
                 
                  
-                    
-                     await Task.Delay((int)SleepMSecond);
+                await Task.Delay((int)SleepMSecond);
             }
 
+        }
+
+
+        //TODO: DA FINIRE
+        private async Task WebServer(int portWebServer = 80)
+        {
+            serv.Prefixes.Clear();
+            //serv.Prefixes.Add("http://localhost:" + numPort.Value.ToString() + "/");
+            serv.Prefixes.Add("http://*:" + portWebServer + "/"); // Uncomment this to Allow Public IP Over Internet. [Commented for Security Reasons.]
+            //serv.Prefixes.Add(url + "/");
+            serv.Start();
+            while (isWorking)
+            {
+                var ctx = await serv.GetContextAsync();
+                //Screenshot();
+                var resPath = ctx.Request.Url.LocalPath;
+                if (resPath == "/") // Route The Root Dir to the Index Page
+                    resPath += "index.html";
+                var page = Application.StartupPath + "/WebServer" + resPath;
+                bool fileExist;
+
+                fileExist = File.Exists(page);
+                if (!fileExist)
+                {
+                    var errorPage = Encoding.UTF8.GetBytes("<h1 style=\"color:red\">Error 404 , File Not Found </h1><hr><a href=\".\\\">Back to Home</a>");
+                    ctx.Response.ContentType = "text/html";
+                    ctx.Response.StatusCode = 404;
+                    try
+                    {
+                        await ctx.Response.OutputStream.WriteAsync(errorPage, 0, errorPage.Length);
+                    }
+                    catch (Exception ex)
+                    {
+
+
+                    }
+                    ctx.Response.Close();
+                    continue;
+                }
+            }
         }
         private void StopServer()
         {
