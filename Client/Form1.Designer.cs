@@ -110,6 +110,7 @@
             this.jpgPanel1.Name = "jpgPanel1";
             this.jpgPanel1.Size = new System.Drawing.Size(776, 390);
             this.jpgPanel1.TabIndex = 5;
+            this.jpgPanel1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.jpgPanel1_MouseDoubleClick);
             // 
             // comboIPs
             // 

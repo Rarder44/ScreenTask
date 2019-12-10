@@ -147,5 +147,55 @@ namespace Client
             }
             comboIPs.SelectedIndex = comboIPs.Items.Count - 1;
         }
+
+
+        WindowState OldState = null;
+        bool OnFullScreen = false;
+
+        private void jpgPanel1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (OnFullScreen)
+                SetOldState();
+            else
+                FullScreen();
+
+            
+        }
+
+
+        private void FullScreen()
+        {
+            //salvo lo stato corrente
+
+
+            this.TopMost = true;
+            jpgPanel1.Dock = DockStyle.Fill;
+            this.FormBorderStyle = FormBorderStyle.None;
+            statusStrip1.Hide();
+            comboIPs.Hide();
+            
+
+            OnFullScreen = true;
+        }
+        private void SetOldState()
+        {
+            //if (OldState == null)
+            //    return;
+
+            this.TopMost = false;
+            jpgPanel1.Dock = DockStyle.None;
+            jpgPanel1.Anchor=AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            this.FormBorderStyle = FormBorderStyle.Sizable;
+            statusStrip1.Show();
+            comboIPs.Show();
+
+
+            OnFullScreen = false;
+        }
+
+        class WindowState
+        {
+
+        }
     }
 }

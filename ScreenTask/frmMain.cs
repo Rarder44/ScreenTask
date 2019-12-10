@@ -194,7 +194,8 @@ namespace ScreenTask
         {
             isWorking = false;
             isTakingScreenshots = false;
-            serv.Close();
+            if(serv!=null)
+                serv.Close();
             Log("Server Stoped.");
         }
        
