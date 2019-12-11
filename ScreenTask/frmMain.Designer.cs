@@ -47,6 +47,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.jpgPreview = new ExtendCSharp.Controls.JPGPanel();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numShotEvery)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
@@ -76,6 +77,8 @@
             // 
             this.cbCaptureMouse.AutoSize = true;
             this.cbCaptureMouse.BackColor = System.Drawing.Color.Transparent;
+            this.cbCaptureMouse.Checked = true;
+            this.cbCaptureMouse.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbCaptureMouse.Location = new System.Drawing.Point(12, 179);
             this.cbCaptureMouse.Name = "cbCaptureMouse";
             this.cbCaptureMouse.Size = new System.Drawing.Size(152, 19);
@@ -277,6 +280,16 @@
             this.jpgPreview.TabIndex = 39;
             this.jpgPreview.DoubleClick += new System.EventHandler(this.jpgPreview_DoubleClick);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Segoe Print", 27.84906F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(12, 9);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(276, 71);
+            this.label3.TabIndex = 40;
+            this.label3.Text = "Screen Task";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -284,6 +297,7 @@
             this.BackColor = System.Drawing.Color.DarkGray;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(613, 419);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.jpgPreview);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label7);
@@ -337,6 +351,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Panel panel1;
         private ExtendCSharp.Controls.JPGPanel jpgPreview;
+        private System.Windows.Forms.Label label3;
     }
 }
 

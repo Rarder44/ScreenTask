@@ -48,10 +48,13 @@ namespace Client
             Frame++;    
         }
 
-  
+        
         private void button1_Click(object sender, EventArgs e)
         {
-            StartConnection();
+            if (Connesso)
+                StopConnection();
+            else
+                StartConnection();
         }
 
 
@@ -120,15 +123,14 @@ namespace Client
 
         private void EnableGUI(bool enable)
         {
-            button1.SetEnableInvoke(enable);
+            if (enable)
+                btnConnection.Text = "Connect";
+            else
+                btnConnection.Text = "Disconnect";
+
+            //btnConnection.SetEnableInvoke(enable);
             numeric_Port.SetEnableInvoke(enable);
             comboIPs.SetEnableInvoke(enable);
-            button2.SetEnableInvoke(!enable);
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            StopConnection();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -149,7 +151,7 @@ namespace Client
         }
 
 
-        WindowState OldState = null;
+     
         bool OnFullScreen = false;
 
         private void jpgPanel1_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -167,8 +169,7 @@ namespace Client
         {
             //salvo lo stato corrente
 
-
-            this.TopMost = true;
+            //this.TopMost = true;
             jpgPanel1.Dock = DockStyle.Fill;
             this.FormBorderStyle = FormBorderStyle.None;
             statusStrip1.Hide();
@@ -179,23 +180,57 @@ namespace Client
         }
         private void SetOldState()
         {
-            //if (OldState == null)
-            //    return;
-
             this.TopMost = false;
-            jpgPanel1.Dock = DockStyle.None;
-            jpgPanel1.Anchor=AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            this.FormBorderStyle = FormBorderStyle.Sizable;
             statusStrip1.Show();
             comboIPs.Show();
-
-
+            this.FormBorderStyle = FormBorderStyle.Sizable;
+            jpgPanel1.Dock = DockStyle.None;
+            ResetJpgPanelSize();
+            jpgPanel1.Anchor=AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+  
             OnFullScreen = false;
         }
 
-        class WindowState
+        private void ResetJpgPanelSize()
         {
+            int BaseHeight = 35;
+            jpgPanel1.Location = new Point(0, BaseHeight);
+            jpgPanel1.Height = ClientSize.Height - BaseHeight - statusStrip1.Height;
+            jpgPanel1.Width = ClientSize.Width;
+        }
 
+
+        bool Moviment = false;
+        Point LastPoint ;
+        private void jpgPanel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (OnFullScreen)
+            {
+                Moviment = true;
+                LastPoint = this.PointToScreen(e.Location);
+            }
+        }
+
+        private void jpgPanel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            Moviment = false;
+        }
+
+        private void jpgPanel1_MouseLeave(object sender, EventArgs e)
+        {
+            Moviment = false;
+        }
+
+        private void jpgPanel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if(Moviment)
+            {
+                Point AbsPoint = this.PointToScreen(e.Location);
+                Point delta = AbsPoint.Sub(LastPoint);
+                //Console.WriteLine(AbsPoint + " "+delta);
+                this.Location = this.Location.Add(delta);
+                LastPoint = AbsPoint;
+            }
         }
     }
 }

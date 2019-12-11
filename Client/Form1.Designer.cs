@@ -28,26 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            this.btnConnection = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.numeric_Port = new System.Windows.Forms.NumericUpDown();
-            this.button2 = new System.Windows.Forms.Button();
-            this.jpgPanel1 = new ExtendCSharp.Controls.JPGPanel();
             this.comboIPs = new System.Windows.Forms.ComboBox();
+            this.jpgPanel1 = new ExtendCSharp.Controls.JPGPanel();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_Port)).BeginInit();
             this.SuspendLayout();
             // 
-            // button1
+            // btnConnection
             // 
-            this.button1.Location = new System.Drawing.Point(12, 6);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Connect";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnConnection.Location = new System.Drawing.Point(12, 6);
+            this.btnConnection.Name = "btnConnection";
+            this.btnConnection.Size = new System.Drawing.Size(83, 23);
+            this.btnConnection.TabIndex = 1;
+            this.btnConnection.Text = "Connect";
+            this.btnConnection.UseVisualStyleBackColor = true;
+            this.btnConnection.Click += new System.EventHandler(this.button1_Click);
             // 
             // statusStrip1
             // 
@@ -68,7 +68,7 @@
             // 
             // numeric_Port
             // 
-            this.numeric_Port.Location = new System.Drawing.Point(220, 7);
+            this.numeric_Port.Location = new System.Drawing.Point(228, 7);
             this.numeric_Port.Maximum = new decimal(new int[] {
             65536,
             0,
@@ -88,16 +88,13 @@
             0,
             0});
             // 
-            // button2
+            // comboIPs
             // 
-            this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(713, 6);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Disconnect";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.comboIPs.FormattingEnabled = true;
+            this.comboIPs.Location = new System.Drawing.Point(101, 6);
+            this.comboIPs.Name = "comboIPs";
+            this.comboIPs.Size = new System.Drawing.Size(121, 21);
+            this.comboIPs.TabIndex = 6;
             // 
             // jpgPanel1
             // 
@@ -106,19 +103,15 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.jpgPanel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.jpgPanel1.jpg = null;
-            this.jpgPanel1.Location = new System.Drawing.Point(12, 35);
+            this.jpgPanel1.Location = new System.Drawing.Point(0, 35);
             this.jpgPanel1.Name = "jpgPanel1";
-            this.jpgPanel1.Size = new System.Drawing.Size(776, 390);
+            this.jpgPanel1.Size = new System.Drawing.Size(800, 390);
             this.jpgPanel1.TabIndex = 5;
             this.jpgPanel1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.jpgPanel1_MouseDoubleClick);
-            // 
-            // comboIPs
-            // 
-            this.comboIPs.FormattingEnabled = true;
-            this.comboIPs.Location = new System.Drawing.Point(93, 6);
-            this.comboIPs.Name = "comboIPs";
-            this.comboIPs.Size = new System.Drawing.Size(121, 21);
-            this.comboIPs.TabIndex = 6;
+            this.jpgPanel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.jpgPanel1_MouseDown);
+            this.jpgPanel1.MouseLeave += new System.EventHandler(this.jpgPanel1_MouseLeave);
+            this.jpgPanel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.jpgPanel1_MouseMove);
+            this.jpgPanel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.jpgPanel1_MouseUp);
             // 
             // Form1
             // 
@@ -129,10 +122,10 @@
             this.Controls.Add(this.jpgPanel1);
             this.Controls.Add(this.numeric_Port);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnConnection);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Client - Screen Task";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.statusStrip1.ResumeLayout(false);
@@ -144,12 +137,11 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnConnection;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.NumericUpDown numeric_Port;
         private ExtendCSharp.Controls.JPGPanel jpgPanel1;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ComboBox comboIPs;
     }
 }

@@ -56,7 +56,7 @@ namespace ScreenTask
             InitializeComponent();
             img = new MemoryStream();
             isPreview = false;
-            isMouseCapture = false;
+            isMouseCapture = true;
 
 
             ServicesManager.RegistService(new NetworkService());
