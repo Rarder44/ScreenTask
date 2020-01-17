@@ -9,6 +9,7 @@ namespace CommonLib
 {
     public static class CommonSetting
     {
-        public static SendingProtocol sendingProtocol { get; set; } = SendingProtocol.Multicast;
+        public static SendingProtocol sendingProtocol { get; set; } = SendingProtocol.TCP;
+        public static String MulticastAddress = "224.168.100.2";
     }
 }

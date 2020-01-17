@@ -45,7 +45,7 @@ namespace ScreenTask.Classes
                 {
                     try
                     {
-                        dp.SerializeToStream(client.GetStream()); 
+                        dp.SerializeToStream(client.GetStream());       //INVIARE I DATI IN MANIERA ASINCRONA!!!
                     }
                     catch (Exception ex)
                     {
@@ -53,25 +53,26 @@ namespace ScreenTask.Classes
                         Client_disconnected(client);
                     }
                 }
-
-
-                //INVIARE I DATI IN MANIERA ASINCRONA!!!
+                
             }
-            //TODO: scorro tutti i client ed invio il dato 
+            // scorro tutti i client ed invio il dato 
             //TODO: pensare ad implementare un'ACK del dato con controllo di flusso
         }
 
         public void Start()
         {
-            //TODO: faccio partire il thread di ascolto dei nuovi client
+            //faccio partire il thread di ascolto dei nuovi client
             Listener = new TcpListenerPlus(SourceIP, SourcePort);
             Listener.ClientConnected += Listener_ClientConnected;
             Listener.Start();
+            Common.Log("Server Started Successfuly!");
+            Common.Log("TCP Listener : " + SourceIP + ":" + SourcePort);
+
         }
 
         public void Stop()
         {
-            //TODO: fermo il thread di ascolto 
+            // fermo il thread di ascolto 
             if (Listener != null)
                 Listener.Stop();
             foreach (TcpClientPlus client in Clients)

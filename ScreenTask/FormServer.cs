@@ -34,7 +34,7 @@ namespace ScreenTask
      - creare task dedicati per la gestione dell'invio dei dati e per il web server
 
          */
-    public partial class frmMain : Form
+    public partial class FormServer : Form
     {
         private bool isWorking;
         private bool isTakingScreenshots;
@@ -43,8 +43,7 @@ namespace ScreenTask
 
         
         private MemoryStream img;
-        private List<Tuple<string, string>> _ips;
-       
+   
         
 
         Bitmap LastBitmap = null;
@@ -57,7 +56,7 @@ namespace ScreenTask
         ISenderServices sender;
         HTTP_Downloader http;
 
-        public frmMain()
+        public FormServer()
         {
             InitializeComponent();
             img = new MemoryStream();
@@ -73,10 +72,12 @@ namespace ScreenTask
             if(CommonSetting.sendingProtocol==SendingProtocol.Multicast)
             {
                 sender = new Sender_Multicast();
+                this.Text += " - Multicast";
             }
             else if(CommonSetting.sendingProtocol==SendingProtocol.TCP)
             {
                 sender = new Sender_TCP();
+                this.Text += " - TCP";
             }
             http = new HTTP_Downloader();
         }
@@ -116,10 +117,19 @@ namespace ScreenTask
         private async Task SendingLoop()
         {
             JPGQuality = (uint)trackBar1.Value;
-            String selectedIP = _ips.ElementAt(comboIPs.SelectedIndex).Item2;
+            String selectedIP = comboIPs.SelectedItem._Cast<ComboIp>().Address;
             int Port = (int)numPort.Value;
 
-            sender.Setup(0, Port, selectedIP);
+            if (CommonSetting.sendingProtocol == SendingProtocol.Multicast)
+            {
+                sender.Setup(0, Port, selectedIP);
+            }
+            else if (CommonSetting.sendingProtocol == SendingProtocol.TCP)
+            {
+                sender.Setup(Port, 0, selectedIP);
+            }
+
+
             sender.Start();
             while (isWorking)
             {
@@ -294,11 +304,10 @@ namespace ScreenTask
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            _ips = ServicesManager.Get< NetworkService>().GetAllIPv4Addresses();
+            List<ComboIp> _ips = ServicesManager.Get< NetworkService>().GetAllIPv4Addresses();
             foreach (var ip in _ips)
-            {
-                comboIPs.Items.Add(ip.Item2 + " - " + ip.Item1);
-            }
+                comboIPs.Items.Add(ip);
+            
             comboIPs.SelectedIndex = comboIPs.Items.Count - 1;
         }
 

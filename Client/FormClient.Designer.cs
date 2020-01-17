@@ -1,6 +1,6 @@
 ﻿namespace Client
 {
-    partial class Form1
+    partial class FormClient
     {
         /// <summary>
         /// Variabile di progettazione necessaria.
@@ -28,13 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormClient));
             this.btnConnection = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.numeric_Port = new System.Windows.Forms.NumericUpDown();
             this.comboIPs = new System.Windows.Forms.ComboBox();
             this.jpgPanel1 = new ExtendCSharp.Controls.JPGPanel();
+            this.textBoxIP = new System.Windows.Forms.TextBox();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_Port)).BeginInit();
             this.SuspendLayout();
@@ -54,16 +55,16 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(18, 18);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 426);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 428);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(800, 24);
+            this.statusStrip1.Size = new System.Drawing.Size(800, 22);
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(18, 19);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(16, 17);
             this.toolStripStatusLabel1.Text = "...";
             // 
             // numeric_Port
@@ -113,18 +114,26 @@
             this.jpgPanel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.jpgPanel1_MouseMove);
             this.jpgPanel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.jpgPanel1_MouseUp);
             // 
-            // Form1
+            // textBoxIP
+            // 
+            this.textBoxIP.Location = new System.Drawing.Point(334, 6);
+            this.textBoxIP.Name = "textBoxIP";
+            this.textBoxIP.Size = new System.Drawing.Size(121, 20);
+            this.textBoxIP.TabIndex = 7;
+            // 
+            // FormClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.textBoxIP);
             this.Controls.Add(this.comboIPs);
             this.Controls.Add(this.jpgPanel1);
             this.Controls.Add(this.numeric_Port);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.btnConnection);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form1";
+            this.Name = "FormClient";
             this.Text = "Client - Screen Task";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -143,6 +152,7 @@
         private System.Windows.Forms.NumericUpDown numeric_Port;
         private ExtendCSharp.Controls.JPGPanel jpgPanel1;
         private System.Windows.Forms.ComboBox comboIPs;
+        private System.Windows.Forms.TextBox textBoxIP;
     }
 }
 

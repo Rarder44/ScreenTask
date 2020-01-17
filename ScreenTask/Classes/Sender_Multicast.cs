@@ -17,7 +17,7 @@ namespace ScreenTask.Classes
 
 
         public int DestinationPort { get; set; }// = 7070;
-        public String MulticastAddress { get; set; } = "224.168.100.2";
+        public String MulticastAddress { get; set; } = CommonLib.CommonSetting.MulticastAddress;
        
         MulticastClient sender;
 
@@ -44,15 +44,18 @@ namespace ScreenTask.Classes
             sender = new MulticastClient(MulticastAddress, SourcePort,DestinationPort, SourceIP, false);
             sender.JoinMulticast();
             Common.Log("Server Started Successfuly!");
-            Common.Log("Multicast socket : " + MulticastAddress + ":" + SourcePort);
+            Common.Log("Multicast destination : " + MulticastAddress + ":" + DestinationPort);
             Common.Log("Output interface: " + SourceIP);
            
         }
 
         public void Stop()
         {
-            sender.Close();
-            sender.Dispose();
+            if (sender != null)
+            {
+                sender.Close();
+                sender.Dispose();
+            }
         }
 
         public void Setup(int? SourcePort, int? DestinationPort, string SourceIP)

@@ -26,7 +26,7 @@ namespace Client
             //Non posso generare qua i servizi, altrimenti mi carica la ExtendCSharp prima del OnResolveAssembly 
             //-> li carico nel load/costruttore del form
             //ExtendCSharp.Services.ServicesManager.RegistService(new ExtendCSharp.Services.NetworkService());
-            Application.Run(new Form1());
+            Application.Run(new FormClient());
         }
 
         // This function is not called if the Assembly is already previously loaded into memory.

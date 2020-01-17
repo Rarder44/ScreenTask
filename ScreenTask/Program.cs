@@ -63,7 +63,7 @@ namespace ScreenTask
             }
 
 
-            Application.Run(new frmMain());
+            Application.Run(new FormServer());
             
         }
 

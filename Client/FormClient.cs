@@ -14,6 +14,7 @@ using ExtendCSharp;
 using ExtendCSharp.Classes;
 using System.Diagnostics;
 using ExtendCSharp.Services;
+using Client.Classes;
 
 namespace Client
 {
@@ -24,22 +25,53 @@ namespace Client
      
 
      */
-    public partial class Form1 : Form
+    public partial class FormClient : Form
     {
         bool Connesso = false;
         int Frame = 0;
-        String MulticastAddress = "224.168.100.2";
-        MulticastClient c;
-        List<Tuple<string, string>> _ips;
+
+        Control IpControl;
+            
+        
 
 
-        public Form1()
+        IReceiverServices Receiver;
+
+        public FormClient()
         {
             InitializeComponent();
             ExtendCSharp.Services.ServicesManager.RegistService(new ExtendCSharp.Services.NetworkService());
 
+            if (CommonLib.CommonSetting.sendingProtocol == CommonLib.Enums.SendingProtocol.Multicast)
+            {
+                Receiver = new Receiver_Multicast();
+                this.Text += " - Multicast";
+                IpControl = comboIPs;
+                textBoxIP.Hide();
+            }
+            else if (CommonLib.CommonSetting.sendingProtocol == CommonLib.Enums.SendingProtocol.TCP)
+            {
+                Receiver = new Receiver_TCP();
+                this.Text += " - TCP";
+                IpControl = textBoxIP;
+                comboIPs.Hide();
+                textBoxIP.Location = comboIPs.Location;
+                textBoxIP.Text = "127.0.0.1";
+            }
+
+            Receiver.OnDataReceived += C_onReceivedByte;
+            Receiver.OnError += Receiver_OnError;
+           Common.Log = (String s) =>
+            {
+                toolStripStatusLabel1.SetTextInvoke(s);
+            };
+
         }
 
+        private void Receiver_OnError(object sender, EventArgs e)
+        {
+            StopConnection();
+        }
 
         private void C_onReceivedByte(byte[] data, System.Net.EndPoint remoteEP)
         {
@@ -57,50 +89,64 @@ namespace Client
                 StartConnection();
         }
 
-
-        private void StopConnection()
-        {
-            Connesso = false;
-            if (c != null)
-            {
-                c.StopListener();
-                c.Dispose();
-            }
-            toolStripStatusLabel1.SetTextInvoke("Connessione interrotta");
-            EnableGUI(true);
-        }
-
         private void StartConnection()
         {
             try
             {
-                toolStripStatusLabel1.SetTextInvoke("Connessione in corso...");
+                Common.Log("Connessione in corso...");
                 EnableGUI(false);
+              
 
-                string intfIP = _ips.ElementAt(comboIPs.SelectedIndex).Item2;
-                int Port = (int)numeric_Port.Value;
+                if (CommonLib.CommonSetting.sendingProtocol == CommonLib.Enums.SendingProtocol.Multicast)
+                {
+                    string intfIP = ((ComboIp)comboIPs.SelectedItem).Address;
+                    int Port = (int)numeric_Port.Value;
+                   
+                    Receiver.Setup(intfIP, Port, null, null);
+                }
+                else if (CommonLib.CommonSetting.sendingProtocol == CommonLib.Enums.SendingProtocol.TCP)
+                {
+                    string intfIP = textBoxIP.Text;
+                    int Port = (int)numeric_Port.Value;
+
+                    Receiver.Setup(null,null,intfIP, Port);
+                }
                 Connesso = true;
 
-                if (c != null)
-                    c.Dispose();
 
-                c = new MulticastClient(MulticastAddress,Port, Port, intfIP);
-                c.onReceivedByte += C_onReceivedByte;
-                c.StartListen();
+                Receiver.Start();
 
                 new Task(TaskFPS).Start();
-                toolStripStatusLabel1.SetTextInvoke("Connessione effettuata");
-               
+                Common.Log("Connessione effettuata");
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                toolStripStatusLabel1.SetTextInvoke("Impossibile stabilire la connessione");
+                Common.Log("Impossibile stabilire la connessione");
                 EnableGUI(true);
             }
-            
-
-           
         }
+
+        bool IsAlreadyStopped = false;
+        
+        private void StopConnection()
+        {
+            if (IsAlreadyStopped)
+            {
+                IsAlreadyStopped = false;
+            }
+            else
+            {
+                IsAlreadyStopped = true;
+                Connesso = false;
+                Receiver.Stop();
+                Common.Log("Connessione interrotta");
+                EnableGUI(true);
+            }
+        }
+
+
+
 
 
         private void TaskFPS()
@@ -124,13 +170,12 @@ namespace Client
         private void EnableGUI(bool enable)
         {
             if (enable)
-                btnConnection.Text = "Connect";
+                btnConnection.SetTextInvoke( "Connect");
             else
-                btnConnection.Text = "Disconnect";
+                btnConnection.SetTextInvoke("Disconnect");
 
-            //btnConnection.SetEnableInvoke(enable);
             numeric_Port.SetEnableInvoke(enable);
-            comboIPs.SetEnableInvoke(enable);
+            IpControl.SetEnableInvoke(enable);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -142,12 +187,14 @@ namespace Client
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            _ips = ServicesManager.Get<NetworkService>().GetAllIPv4Addresses();
-            foreach (var ip in _ips)
+            if (CommonLib.CommonSetting.sendingProtocol == CommonLib.Enums.SendingProtocol.Multicast)
             {
-                comboIPs.Items.Add(ip.Item2 + " - " + ip.Item1);
+                List<ComboIp> _ips = ServicesManager.Get<NetworkService>().GetAllIPv4Addresses();
+                foreach (var ip in _ips)
+                    comboIPs.Items.Add(ip);
+
+                comboIPs.SelectedIndex = comboIPs.Items.Count - 1;
             }
-            comboIPs.SelectedIndex = comboIPs.Items.Count - 1;
         }
 
 
@@ -159,30 +206,24 @@ namespace Client
             if (OnFullScreen)
                 SetOldState();
             else
-                FullScreen();
-
-            
+                FullScreen();  
         }
 
 
         private void FullScreen()
         {
             //salvo lo stato corrente
-
-            //this.TopMost = true;
             jpgPanel1.Dock = DockStyle.Fill;
             this.FormBorderStyle = FormBorderStyle.None;
             statusStrip1.Hide();
-            comboIPs.Hide();
-            
-
+            IpControl.Hide();
             OnFullScreen = true;
         }
         private void SetOldState()
         {
             this.TopMost = false;
             statusStrip1.Show();
-            comboIPs.Show();
+            IpControl.Show();
             this.FormBorderStyle = FormBorderStyle.Sizable;
             jpgPanel1.Dock = DockStyle.None;
             ResetJpgPanelSize();

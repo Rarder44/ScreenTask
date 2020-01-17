@@ -1,6 +1,6 @@
 ﻿namespace ScreenTask
 {
-    partial class frmMain
+    partial class FormServer
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormServer));
             this.txtLog = new System.Windows.Forms.TextBox();
             this.comboIPs = new System.Windows.Forms.ComboBox();
             this.cbCaptureMouse = new System.Windows.Forms.CheckBox();
