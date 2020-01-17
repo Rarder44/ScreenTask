@@ -172,7 +172,7 @@ namespace ScreenTask
 
             if (captureMouse)
             {
-                newBitmap = ScreenCapturePInvoke.CaptureFullScreen(true);
+                newBitmap = ScreenCapturePInvoke.CapturePrimaryScreen(true);
                 
             }
             else
@@ -192,6 +192,13 @@ namespace ScreenTask
                     LastBitmap.Dispose();
                 LastBitmap = newBitmap;
                 JpegToSend = true;
+
+                LastJpeg = new JPG(LastBitmap, JPGQuality);
+                if (isPreview)
+                {
+                    jpgPreview.jpg = LastJpeg;
+                }
+
             }
             else
             {
@@ -200,11 +207,7 @@ namespace ScreenTask
 
 
 
-            LastJpeg = new JPG(LastBitmap, JPGQuality);
-            if (isPreview)
-            {
-                jpgPreview.jpg = LastJpeg;
-            }
+            
 
 
 
