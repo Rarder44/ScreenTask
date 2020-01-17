@@ -20,6 +20,9 @@ using System.Windows.Forms;
 using ExtendCSharp;
 using ExtendCSharp.Services;
 using System.Reflection;
+using ScreenTask.Classes;
+using CommonLib;
+using CommonLib.Enums;
 
 namespace ScreenTask
 {
@@ -41,8 +44,8 @@ namespace ScreenTask
         
         private MemoryStream img;
         private List<Tuple<string, string>> _ips;
-        HttpListener serv;
-        String MulticastAddress = "224.168.100.2";
+       
+        
 
         Bitmap LastBitmap = null;
         JPG LastJpeg = null;
@@ -50,6 +53,9 @@ namespace ScreenTask
 
         uint JPGQuality;
         uint SleepMSecond;
+
+        ISenderServices sender;
+        HTTP_Downloader http;
 
         public frmMain()
         {
@@ -60,17 +66,23 @@ namespace ScreenTask
 
 
             ServicesManager.RegistService(new NetworkService());
-            ServicesManager.RegistService(new SystemService());
-            
+            ServicesManager.RegistService(new SystemService());  
             ServicesManager.RegistService(new ResourcesService(System.Reflection.Assembly.GetExecutingAssembly()));
+
+            Common.Log = Log;
+            if(CommonSetting.sendingProtocol==SendingProtocol.Multicast)
+            {
+                sender = new Sender_Multicast();
+            }
+            else if(CommonSetting.sendingProtocol==SendingProtocol.TCP)
+            {
+                sender = new Sender_TCP();
+            }
+            http = new HTTP_Downloader();
         }
 
-        MulticastClient c;
         private async void btnStartServer_Click(object sender, EventArgs e)
         {
-
-           
-
             if (btnStartServer.Tag.ToString() != "start")           //STOP
             {
                 btnStartServer.Tag = "start";
@@ -81,25 +93,17 @@ namespace ScreenTask
 
             try
             {
-
-                serv = new HttpListener();
-                serv.IgnoreWriteExceptions = true;
                 isTakingScreenshots = true;
                 isWorking = true;
                 Log("Starting Server, Please Wait...");
                 SleepMSecond = (uint)numShotEvery.Value;
                 await AddFirewallRule((int)numPort.Value);
                 Task.Factory.StartNew(() => CaptureScreenEvery()).Wait();
-                Task.Factory.StartNew(() => WebServer()).Wait();
+                http.Start();
                 btnStartServer.Tag = "stop";
                 btnStartServer.Text = "Stop Server";
-                await StartServer();
+                await SendingLoop();
 
-            }
-            catch (ObjectDisposedException disObj)
-            {
-                serv = new HttpListener();
-                serv.IgnoreWriteExceptions = true;
             }
             catch (Exception ex)
             {
@@ -109,23 +113,16 @@ namespace ScreenTask
 
 
      
-        private async Task StartServer()
+        private async Task SendingLoop()
         {
-
+            JPGQuality = (uint)trackBar1.Value;
             String selectedIP = _ips.ElementAt(comboIPs.SelectedIndex).Item2;
             int Port = (int)numPort.Value;
-            c = new MulticastClient(MulticastAddress, Port, selectedIP, false);
-            c.JoinMulticast(true);
-            
-            JPGQuality = (uint)trackBar1.Value;
 
-            Log("Server Started Successfuly!");
-            Log("Multicast socket : " + MulticastAddress+":"+ Port);
-            Log("Output interface: " + selectedIP);
-            
+            sender.Setup(0, Port, selectedIP);
+            sender.Start();
             while (isWorking)
             {
-                
                 if (LastJpeg == null)
                 {
                     await Task.Delay(1);
@@ -136,66 +133,20 @@ namespace ScreenTask
                     await Task.Delay((int)SleepMSecond / 2);
                     continue;
                 }
-
-               
-                c.SendGroup(LastJpeg.data,(ulong)DateTimeOffset.Now.ToUnixTimeMilliseconds());
-
-                
-                 
+                sender.Send(LastJpeg.data);
                 await Task.Delay((int)SleepMSecond);
             }
 
         }
 
 
-        private async Task WebServer(int portWebServer = 80)
-        {
-            serv.Prefixes.Clear();
-            string Address = "http://*:" + portWebServer + "/";
-            serv.Prefixes.Add(Address);
-            Log("Download address "+ Address);
-            serv.Start();
-
-           
-
-            while (isWorking)
-            {
-                var ctx = await serv.GetContextAsync();
-
-
-                //qualsiasi richiesta la ridireziono sul download del file
-                FilePlus client = ServicesManager.Get<ResourcesService>().GetObject<FilePlus>("Client.exe");
-                client.Extension = ".exe";
-                client.Name = "Client";
-
-
-                ctx.Response.ContentType = "application/octet-stream";
-                ctx.Response.AddHeader("Content-disposition", "attachment; filename=Client.exe");
-
-                ctx.Response.StatusCode = 200;
-                try
-                {
-
-                    //TODO: mi sa che non devo fare await
-                    await ctx.Response.OutputStream.WriteAsync(client.data, 0,  client.data.Length);
-                }
-                catch (Exception ex)
-                {
-                  
-                        //Do Nothing !!! this is the Only Effective Solution for this Exception : the specified network name is no longer available
-                }
-
-                ctx.Response.Close();
-            }
-
-            serv.Stop();
-        }
+       
         private void StopServer()
         {
             isWorking = false;
             isTakingScreenshots = false;
-            if(serv!=null)
-                serv.Close();
+            http.Stop();
+            sender.Stop();
             Log("Server Stoped.");
         }
        
@@ -305,7 +256,6 @@ namespace ScreenTask
         private void Log(string text)
         {
             txtLog.AppendTextInvoke(DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString() + " : " + text + "\r\n");
-
         }
 
                

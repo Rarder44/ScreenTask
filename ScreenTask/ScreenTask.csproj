@@ -54,6 +54,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\HTTP_Downloader.cs" />
+    <Compile Include="Classes\ISenderServices.cs" />
+    <Compile Include="Classes\Sender_Multicast.cs" />
+    <Compile Include="Classes\Sender_TCP.cs" />
+    <Compile Include="Common.cs" />
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -99,7 +104,12 @@
       <Project>{9199318b-0f63-4faf-a0f1-823ef0072eea}</Project>
       <Name>ExtendCSharp</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CommonLib\CommonLib.csproj">
+      <Project>{fd629d66-af8b-460e-9210-f7db77451da6}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
     <ItemGroup>

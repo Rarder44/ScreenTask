@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CommonLib;
+using CommonLib.Enums;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,15 +12,57 @@ namespace ScreenTask
 {
     static class Program
     {
+        //TODO: controllo argomenti per vedere se mi passa il SendingProtocol
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string [] args)
         {
             AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+
+            if (args != null)
+            {
+                if (args.Length > 0)
+                {
+                    if (args[0] == "\\?" || args[0] == "/?")
+                    {
+                        Console.WriteLine("ScreenTask.exe [-SP:SENDING_PROTOCOL] [-P:PORT]");
+                        Console.WriteLine("SENDING_PROTOCOL:\r\nTCP\r\nMulticast\r\n");
+                        //Console.WriteLine("PORT: numero intero per definire quale porta usare.\r\nTCP -> Porta di ascolto\r\nMulticast -> Porta di invio");
+                        Console.WriteLine("PORT: NON IMPLEMENTATA");
+                        return;
+                    }
+                    foreach(string a in args)
+                    {
+                        if(a.StartsWith("-SP:"))
+                        {
+                            string tmp=a.Substring(4).ToUpper();
+                            switch(tmp)
+                            {
+                                case "TCP":
+                                    CommonSetting.sendingProtocol = SendingProtocol.TCP;
+                                    break;
+                                case "MULTICAST":
+                                    CommonSetting.sendingProtocol = SendingProtocol.Multicast;
+                                    break;
+                            }
+                        }
+                        if (a.StartsWith("-P:"))
+                        {
+                            int port = int.Parse(a.Substring(3));
+                            //CommonSetting.ProtocolPort = port;
+                        }
+                    }
+                }
+                
+            }
+
+
             Application.Run(new frmMain());
             
         }

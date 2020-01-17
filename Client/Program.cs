@@ -15,13 +15,14 @@ namespace Client
         /// Punto di ingresso principale dell'applicazione.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
 
+           
             //Non posso generare qua i servizi, altrimenti mi carica la ExtendCSharp prima del OnResolveAssembly 
             //-> li carico nel load/costruttore del form
             //ExtendCSharp.Services.ServicesManager.RegistService(new ExtendCSharp.Services.NetworkService());

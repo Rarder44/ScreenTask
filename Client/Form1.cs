@@ -84,7 +84,7 @@ namespace Client
                 if (c != null)
                     c.Dispose();
 
-                c = new MulticastClient(MulticastAddress, Port, intfIP);
+                c = new MulticastClient(MulticastAddress,Port, Port, intfIP);
                 c.onReceivedByte += C_onReceivedByte;
                 c.StartListen();
 

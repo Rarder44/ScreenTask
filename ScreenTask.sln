@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendCSharp", "..\ExtendCSharp\ExtendCSharp.csproj", "{9199318B-0F63-4FAF-A0F1-823EF0072EEA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLib", "CommonLib\CommonLib.csproj", "{FD629D66-AF8B-460E-9210-F7DB77451DA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{9199318B-0F63-4FAF-A0F1-823EF0072EEA}.Release|x64.Build.0 = Release|Any CPU
 		{9199318B-0F63-4FAF-A0F1-823EF0072EEA}.Release|x86.ActiveCfg = Release|Any CPU
 		{9199318B-0F63-4FAF-A0F1-823EF0072EEA}.Release|x86.Build.0 = Release|Any CPU
+		{FD629D66-AF8B-460E-9210-F7DB77451DA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD629D66-AF8B-460E-9210-F7DB77451DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD629D66-AF8B-460E-9210-F7DB77451DA6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FD629D66-AF8B-460E-9210-F7DB77451DA6}.Debug|x64.Build.0 = Debug|Any CPU
+		{FD629D66-AF8B-460E-9210-F7DB77451DA6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FD629D66-AF8B-460E-9210-F7DB77451DA6}.Debug|x86.Build.0 = Debug|Any CPU
+		{FD629D66-AF8B-460E-9210-F7DB77451DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD629D66-AF8B-460E-9210-F7DB77451DA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD629D66-AF8B-460E-9210-F7DB77451DA6}.Release|x64.ActiveCfg = Release|Any CPU
+		{FD629D66-AF8B-460E-9210-F7DB77451DA6}.Release|x64.Build.0 = Release|Any CPU
+		{FD629D66-AF8B-460E-9210-F7DB77451DA6}.Release|x86.ActiveCfg = Release|Any CPU
+		{FD629D66-AF8B-460E-9210-F7DB77451DA6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
