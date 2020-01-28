@@ -44,7 +44,7 @@ namespace Client.Classes
                 connection = await TcpClientPlus.Create(DestinationIpAddress, DestinationPort);
                 connection.Closed += (TcpClientPlus client, out bool ToDispose) =>{
                     Stop();
-                    ToDispose = false;
+                    ToDispose = true;
                 };
 
                 Connesso = true;
