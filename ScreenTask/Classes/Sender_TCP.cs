@@ -45,6 +45,7 @@ namespace ScreenTask.Classes
                 {
                     try
                     {
+                        
                         dp.SerializeToStream(client.GetStream());       //INVIARE I DATI IN MANIERA ASINCRONA!!!
                     }
                     catch (Exception ex)

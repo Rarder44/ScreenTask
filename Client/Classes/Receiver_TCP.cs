@@ -77,6 +77,7 @@ namespace Client.Classes
                     
                 }
             }
+            connection.Close();
         }
 
         private void CheckConnection()
