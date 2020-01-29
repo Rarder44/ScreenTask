@@ -47,6 +47,8 @@ namespace ScreenTask
         ISenderServices sender;             //Servizio per la gestione degli invii  TCP o MULTICAST
         HTTP_Downloader http;               //server per la gestione del download del client
 
+        ScreenCaptureService screenCaptureService;
+
         public FormServer()
         {
             InitializeComponent();
@@ -58,6 +60,9 @@ namespace ScreenTask
             ServicesManager.RegistService(new NetworkService());
             ServicesManager.RegistService(new SystemService());  
             ServicesManager.RegistService(new ResourcesService(System.Reflection.Assembly.GetExecutingAssembly()));
+            ServicesManager.RegistService(new ScreenCaptureService());
+            screenCaptureService = ServicesManager.Get<ScreenCaptureService>();
+
 
             Common.Log = Log;
             if(CommonSetting.sendingProtocol==SendingProtocol.Multicast)
@@ -171,7 +176,7 @@ namespace ScreenTask
 
             if (captureMouse)
             {
-                newBitmap = ScreenCapturePInvoke.CapturePrimaryScreen(true);
+                newBitmap = screenCaptureService.CapturePrimaryScreen(true);
                 
             }
             else
