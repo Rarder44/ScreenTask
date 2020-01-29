@@ -27,39 +27,30 @@ using CommonLib.Enums;
 namespace ScreenTask
 {
 
-    /* 
-     TODO:
-     - la porta non è decisa dalla textbox 
-     - dividere meglio quello che fa il bottone start e la StartServer
-     - creare task dedicati per la gestione dell'invio dei dati e per il web server
 
-         */
     public partial class FormServer : Form
     {
-        private bool isWorking;
-        private bool isTakingScreenshots;
-        private bool isPreview;
-        private bool isMouseCapture;
+        private bool isWorking;             //flag -> gestione del thread del server
+        private bool isTakingScreenshots;   //flag -> se deve fare gli screen
+        private bool isPreview;             //flag -> visualizzare la preview nella GUI
+        private bool isMouseCapture;        //flag -> cattura del mouse negli screen
 
         
-        private MemoryStream img;
-   
-        
 
-        Bitmap LastBitmap = null;
-        JPG LastJpeg = null;
-        bool JpegToSend = false;
+        Bitmap LastBitmap = null;           //Ultima immagine ottenuta
+        JPG LastJpeg = null;                
+        bool JpegToSend = false;            //flag per ottimizzare l'invio ( se l'immagine è duplicata -> false = NON INVIO )
 
-        uint JPGQuality;
-        uint SleepMSecond;
+        uint JPGQuality;                    //parametri per l'invio dell'immagine
+        uint SleepMSecond;                  
 
-        ISenderServices sender;
-        HTTP_Downloader http;
+        ISenderServices sender;             //Servizio per la gestione degli invii  TCP o MULTICAST
+        HTTP_Downloader http;               //server per la gestione del download del client
 
         public FormServer()
         {
             InitializeComponent();
-            img = new MemoryStream();
+            
             isPreview = false;
             isMouseCapture = true;
 
@@ -176,8 +167,6 @@ namespace ScreenTask
         
         private void TakeScreenshot(bool captureMouse)
         {
-            
-
             Bitmap newBitmap;
 
             if (captureMouse)
@@ -208,19 +197,11 @@ namespace ScreenTask
                 {
                     jpgPreview.jpg = LastJpeg;
                 }
-
             }
             else
             {
                 JpegToSend = false;
             }
-
-
-
-            
-
-
-
 
         }
     
@@ -271,7 +252,6 @@ namespace ScreenTask
             txtLog.AppendTextInvoke(DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString() + " : " + text + "\r\n");
         }
 
-               
         private void cbPreview_CheckedChanged(object sender, EventArgs e)
         {
             if (cbPreview.Checked == true)
@@ -328,10 +308,6 @@ namespace ScreenTask
 
 
 
-        private void lblGithub_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://github.com/Rarder44/ScreenTask");
-        }
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {

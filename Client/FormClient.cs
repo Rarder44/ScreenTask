@@ -19,29 +19,32 @@ using Client.Classes;
 namespace Client
 {
 
-    /* TODO:
-     -Creo una classe per gestire gli indirizzi IP visualizzati nella combo box, 
-     in modo da recuperare il selectedItem e prendere direttamente da li l'indirizzo ( senza usare la _ips) 
-     
-
-     */
     public partial class FormClient : Form
     {
         bool Connesso = false;
-        int Frame = 0;
-
-        Control IpControl;
-            
+        bool IsAlreadyStopped = false;  //Durante la fase di stop, lo STOP può essere richiamato più volte,
+                                        //la variabile viene impostata AlreadyStopped a true per evitare StackOverflow
         
+        
+        bool OnFullScreen = false;      //Flag per determinare se è in fullscreen o no
+
+        bool Moviment = false;          //gestione del drag della finestra
+        Point LastPoint;
 
 
-        IReceiverServices Receiver;
 
+        int Frame = 0;                  //Conteggio di frame
+
+        Control IpControl;              //Control per il recupero dell'IP ( cambia a seconda se TCP o MULTICAST )
+        IReceiverServices Receiver;     //Oggetto per la gestione della ricezione dei pacchetti ( TCP o MULTICAST ) 
+
+        
         public FormClient()
         {
             InitializeComponent();
             ExtendCSharp.Services.ServicesManager.RegistService(new ExtendCSharp.Services.NetworkService());
 
+            //setup in base al protocollo
             if (CommonLib.CommonSetting.sendingProtocol == CommonLib.Enums.SendingProtocol.Multicast)
             {
                 Receiver = new Receiver_Multicast();
@@ -61,7 +64,7 @@ namespace Client
 
             Receiver.OnDataReceived += C_onReceivedByte;
             Receiver.OnError += Receiver_OnError;
-           Common.Log = (String s) =>
+            Common.Log = (String s) =>
             {
                 toolStripStatusLabel1.SetTextInvoke(s);
             };
@@ -112,11 +115,11 @@ namespace Client
                     Receiver.Setup(null,null,intfIP, Port);
                 }
                 Connesso = true;
-
+                IsAlreadyStopped = false;
 
                 Receiver.Start();
 
-                new Task(TaskFPS).Start();
+                new Task(TaskFPS).Start();      //Task per la gestione del conteggio degli FPS
                 Common.Log("Connessione effettuata");
 
             }
@@ -127,7 +130,7 @@ namespace Client
             }
         }
 
-        bool IsAlreadyStopped = false;
+        
         
         private void StopConnection()
         {
@@ -156,8 +159,6 @@ namespace Client
             {
                 if (!Connesso)
                     tt.Stop();
-
-
                 this.SetTextInvoke(Frame + " FPS");
                 Frame = 0;
             };
@@ -187,6 +188,7 @@ namespace Client
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            //nel caso di muticast, va a riempire la combo in base al agli IP locali ( per il bind del multicast )
             if (CommonLib.CommonSetting.sendingProtocol == CommonLib.Enums.SendingProtocol.Multicast)
             {
                 List<ComboIp> _ips = ServicesManager.Get<NetworkService>().GetAllIPv4Addresses();
@@ -199,7 +201,7 @@ namespace Client
 
 
      
-        bool OnFullScreen = false;
+        
 
         private void jpgPanel1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -221,6 +223,7 @@ namespace Client
         }
         private void SetOldState()
         {
+            //ripristino lo stato della finestra PRIMA di aver impostato il fullscreen
             this.TopMost = false;
             statusStrip1.Show();
             IpControl.Show();
@@ -241,8 +244,7 @@ namespace Client
         }
 
 
-        bool Moviment = false;
-        Point LastPoint ;
+        
         private void jpgPanel1_MouseDown(object sender, MouseEventArgs e)
         {
             if (OnFullScreen)
