@@ -23,6 +23,7 @@ using System.Reflection;
 using ScreenTask.Classes;
 using CommonLib;
 using CommonLib.Enums;
+using ScreenTask.Forms;
 
 namespace ScreenTask
 {
@@ -61,7 +62,15 @@ namespace ScreenTask
             ServicesManager.RegistService(new SystemService());  
             ServicesManager.RegistService(new ResourcesService(System.Reflection.Assembly.GetExecutingAssembly()));
             ServicesManager.RegistService(new ScreenCaptureService());
+            ServicesManager.RegistService(new FormService());
             screenCaptureService = ServicesManager.Get<ScreenCaptureService>();
+
+            ServicesManager.Get<FormService>().StartFormThread(() =>
+            {
+                Common.connectionsLog = new ConnectionsLog();
+                return Common.connectionsLog;
+            });
+
 
 
             Common.Log = Log;
@@ -317,6 +326,7 @@ namespace ScreenTask
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             StopServer();
+            Common.connectionsLog.CloseInvoke();
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)

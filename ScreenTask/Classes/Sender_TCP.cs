@@ -3,6 +3,7 @@ using ExtendCSharp.TOFIX;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,21 +41,24 @@ namespace ScreenTask.Classes
             foreach (TcpClientPlus client in Clients.ToArray())
             {
                 if (!client.Connected)
-                    Client_disconnected(client);
+                    ClientDisconnected(client);
                 else
                 {
                     try
                     {
-                        
-                        dp.SerializeToStream(client.GetStream());       //INVIARE I DATI IN MANIERA ASINCRONA!!!
+                        //INVIARE I DATI IN MANIERA ASINCRONA!!!
+                        dp.SerializeToStream(client.GetStream()).ContinueWith((previusTask) => {
+                            IPEndPoint ep = (IPEndPoint)client.Client.RemoteEndPoint;
+                            Common.connectionsLog.UpdateConnection(new Forms.Connection(ep.Address.ToString(), ep.Port, previusTask.Result.SpeedText));
+                            //Console.WriteLine(previusTask.Result.SpeedText);
+                        });      
                     }
                     catch (Exception ex)
                     {
                         //errore nel'invio, client disconnesso -> rimuovo il client 
-                        Client_disconnected(client);
+                        ClientDisconnected(client);
                     }
                 }
-                
             }
             // scorro tutti i client ed invio il dato 
             //TODO: pensare ad implementare un'ACK del dato con controllo di flusso
@@ -106,7 +110,7 @@ namespace ScreenTask.Classes
         {
             Clients.Add(client);
         }
-        private void Client_disconnected(TcpClientPlus client)
+        private void ClientDisconnected(TcpClientPlus client)
         {
             Clients.Remove(client);
         }

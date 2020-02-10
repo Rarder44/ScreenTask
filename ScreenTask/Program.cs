@@ -12,8 +12,6 @@ namespace ScreenTask
 {
     static class Program
     {
-        //TODO: controllo argomenti per vedere se mi passa il SendingProtocol
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>

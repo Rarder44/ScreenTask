@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScreenTask.Forms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,6 @@ namespace ScreenTask
     static class Common
     {
         public static Action<String> Log = (string s) => { /* Non implementato */ };
+        public static ConnectionsLog connectionsLog = null;
     }
 }
