@@ -45,14 +45,14 @@
             // 
             this.panel1.Location = new System.Drawing.Point(12, 27);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(200, 348);
+            this.panel1.Size = new System.Drawing.Size(312, 411);
             this.panel1.TabIndex = 1;
             // 
             // ConnectionsLog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(276, 450);
+            this.ClientSize = new System.Drawing.Size(336, 450);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label1);
             this.Name = "ConnectionsLog";

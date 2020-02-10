@@ -49,8 +49,15 @@ namespace ScreenTask.Classes
                         //INVIARE I DATI IN MANIERA ASINCRONA!!!
                         dp.SerializeToStream(client.GetStream()).ContinueWith((previusTask) => {
                             IPEndPoint ep = (IPEndPoint)client.Client.RemoteEndPoint;
-                            Common.connectionsLog.UpdateConnection(new Forms.Connection(ep.Address.ToString(), ep.Port, previusTask.Result.SpeedText));
-                            //Console.WriteLine(previusTask.Result.SpeedText);
+                            try
+                            {
+                                if (Common.connectionsLog != null && !Common.connectionsLog.IsDisposed)
+                                    Common.connectionsLog.UpdateConnection(new Forms.Connection(ep.Address.ToString(), ep.Port, previusTask.Result.SpeedText));
+                            }
+                            catch(Exception e)
+                            {
+                                //errore dato dalla chiusura del form di log
+                            }
                         });      
                     }
                     catch (Exception ex)

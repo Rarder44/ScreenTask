@@ -44,12 +44,12 @@
             // Speed_label
             // 
             this.Speed_label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Speed_label.AutoSize = true;
-            this.Speed_label.Location = new System.Drawing.Point(161, 4);
+            this.Speed_label.Location = new System.Drawing.Point(97, 4);
             this.Speed_label.Name = "Speed_label";
-            this.Speed_label.Size = new System.Drawing.Size(43, 15);
+            this.Speed_label.Size = new System.Drawing.Size(103, 15);
             this.Speed_label.TabIndex = 1;
-            this.Speed_label.Text = "Speed";
+            this.Speed_label.Text = "999,99 Gb/s";
+            this.Speed_label.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // ConnectionControl
             // 

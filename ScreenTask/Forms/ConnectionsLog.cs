@@ -15,7 +15,7 @@ namespace ScreenTask.Forms
     public partial class ConnectionsLog : Form
     {
         List<ConnectionControl> conns = new List<ConnectionControl>();
-
+        ScrollBar vScrollBar1;
         public ConnectionsLog()
         {
             InitializeComponent();
@@ -23,7 +23,7 @@ namespace ScreenTask.Forms
 
         private void ConnectionsLog_Load(object sender, EventArgs e)
         {
-            ScrollBar vScrollBar1 = new VScrollBar();
+            vScrollBar1 = new VScrollBar();
             vScrollBar1.Dock = DockStyle.Right;
             vScrollBar1.Scroll += (sender1, e1) => { panel1.VerticalScroll.Value = vScrollBar1.Value; };
             panel1.Controls.Add(vScrollBar1);
@@ -36,6 +36,8 @@ namespace ScreenTask.Forms
             conns.Add(conn);
 
             int Y = panel1.Controls.Count * conn.Height;
+
+
             /*int Y = -1;
             panel1.Controls.Cast<Control>().ForEach((control) =>
             {
@@ -54,6 +56,7 @@ namespace ScreenTask.Forms
                 Y = 0;*/
 
             conn.Location = new Point(0, Y);
+            conn.Width = panel1.Width - vScrollBar1.Width;
             panel1.AddControlInvoke(conn);
 
         }
