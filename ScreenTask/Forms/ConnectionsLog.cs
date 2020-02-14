@@ -9,13 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExtendCSharp;
+using System.Net;
 
 namespace ScreenTask.Forms
 {
     public partial class ConnectionsLog : Form
     {
         List<ConnectionControl> conns = new List<ConnectionControl>();
-        ScrollBar vScrollBar1;
         public ConnectionsLog()
         {
             InitializeComponent();
@@ -23,10 +23,7 @@ namespace ScreenTask.Forms
 
         private void ConnectionsLog_Load(object sender, EventArgs e)
         {
-            vScrollBar1 = new VScrollBar();
-            vScrollBar1.Dock = DockStyle.Right;
-            vScrollBar1.Scroll += (sender1, e1) => { panel1.VerticalScroll.Value = vScrollBar1.Value; };
-            panel1.Controls.Add(vScrollBar1);
+
         }
 
 
@@ -34,31 +31,17 @@ namespace ScreenTask.Forms
         {
             var conn = new ConnectionControl(c);
             conns.Add(conn);
+            AddConnectionControlToPanel(conn);
 
-            int Y = panel1.Controls.Count * conn.Height;
+           
+        }
+        private void AddConnectionControlToPanel(ConnectionControl cc)
+        {
+            int Y = panel1.Controls.Count * cc.Height;
 
-
-            /*int Y = -1;
-            panel1.Controls.Cast<Control>().ForEach((control) =>
-            {
-                if(Y==-1)
-                {
-                    Y=control.Location.Y*control.Height;
-                }
-                else
-                {
-                    int YTemp = control.Location.Y * control.Height;
-                    if (YTemp > Y)
-                        Y = YTemp;
-                }
-            });
-            if (Y == -1)
-                Y = 0;*/
-
-            conn.Location = new Point(0, Y);
-            conn.Width = panel1.Width - vScrollBar1.Width;
-            panel1.AddControlInvoke(conn);
-
+            cc.SetLocationInvoke(0, Y);
+            cc.SetWidthInvoke( panel1.Width - 25); //grandezza scroll bar
+            panel1.AddControlInvoke(cc);
         }
         public void UpdateConnection(Connection c)
         {
@@ -76,9 +59,16 @@ namespace ScreenTask.Forms
                 }
             }
         }
+
+       
         public void RemoveConnection(Connection c)
         {
-            List<ConnectionControl> toRemove = new List<ConnectionControl>();
+            var ToRemove=new List<ConnectionControl>(conns.Where((cc) => { return cc.details == c; }));
+            //panel1.RemoveControlsInvoke(ToRemove);
+            conns.Remove(ToRemove);
+            CompactConnections();
+            ToRemove.Clear();
+            /*List<ConnectionControl> toRemove = new List<ConnectionControl>();
             foreach(ConnectionControl cc in panel1.Controls)
             {
                 if (cc.details == c)
@@ -86,13 +76,23 @@ namespace ScreenTask.Forms
             }
             foreach(ConnectionControl cc in toRemove)
             {
-                panel1.Controls.Remove(cc);
+                panel1.RemoveControlInvoke(cc);
             }
-           
 
-            toRemove.Clear();
+            conns.RemoveAll((cc) => { return cc.details == c; });
+            
+    */
+        
         }
 
+        public void CompactConnections()
+        {
+            panel1.ClearControlsInvoke();
+            foreach(ConnectionControl cc in conns)
+            {
+                AddConnectionControlToPanel(cc);
+            }
+        }
 
         public void UpdateGUI()
         {
@@ -107,6 +107,11 @@ namespace ScreenTask.Forms
         public int Port { get; set; }
 
         public String Speed { get; set; }
+
+        public Connection(IPEndPoint endPoint,string speed=""):this(endPoint.Address.ToString(), endPoint.Port,speed)
+        {
+
+        }
 
         public Connection(string iP, int port, string speed)
         {

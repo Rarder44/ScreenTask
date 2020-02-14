@@ -41,24 +41,28 @@ namespace ScreenTask.Classes
             foreach (TcpClientPlus client in Clients.ToArray())
             {
                 if (!client.Connected)
+                {
                     ClientDisconnected(client);
+                    Common.connectionsLog.RemoveConnection(new Forms.Connection((IPEndPoint)client.Client.RemoteEndPoint));
+                }
                 else
                 {
                     try
                     {
                         //INVIARE I DATI IN MANIERA ASINCRONA!!!
-                        dp.SerializeToStream(client.GetStream()).ContinueWith((previusTask) => {
+                        dp.SerializeToStream(client.GetStream()).ContinueWith((previusTask) =>
+                        {
                             IPEndPoint ep = (IPEndPoint)client.Client.RemoteEndPoint;
                             try
                             {
                                 if (Common.connectionsLog != null && !Common.connectionsLog.IsDisposed)
                                     Common.connectionsLog.UpdateConnection(new Forms.Connection(ep.Address.ToString(), ep.Port, previusTask.Result.SpeedText));
                             }
-                            catch(Exception e)
+                            catch (Exception e)
                             {
                                 //errore dato dalla chiusura del form di log
                             }
-                        });      
+                        });
                     }
                     catch (Exception ex)
                     {

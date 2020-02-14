@@ -21,7 +21,7 @@ namespace ScreenTask.Classes
                 serv = new HttpListener();
                 serv.IgnoreWriteExceptions = true;
                 isWorking = true;
-                Task.Factory.StartNew(() => WebServer()).Wait();
+                Task.Factory.StartNew(() => WebServer());
             }
             catch (ObjectDisposedException disObj)
             {
